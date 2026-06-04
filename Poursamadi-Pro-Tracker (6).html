@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دستیار معامله‌گری حرفه‌ای | Poursamadi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
+
+        /* --- Dark Mode (Default) --- */
+        :root {
+            --bg: #111318;
+            --text-main: #e2e8f0;
+            --text-light: #94a3b8;
+            --primary: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --shadow-dark: #0a0b0e;
+            --shadow-light: #181b22;
+            --accent-bg: #1c1f26;
+            --check-bg: #2a2f3a;
+            --check-border: rgba(255,255,255,0.1);
+        }
+
+        /* --- Light Mode --- */
+        body.light-mode {
+            --bg: #f1f5f9;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --shadow-dark: #d1d5db;
+            --shadow-light: #ffffff;
+            --accent-bg: #e2e8f0;
+            --check-bg: #ffffff;
+            --check-border: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0 0 50px 0;
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container { max-width: 1150px; margin: 0 auto; padding: 0 15px; }
+
+        /* --- Live Ticker --- */
+        .ticker-container { width: 100%; height: 46px; background: #000; border-bottom: 1px solid #333; }
+
+        /* --- Hero Banner --- */
+        .hero-banner {
+            width: 100%; height: 480px;
+            background-image: url('https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover; background-position: center center;
+            position: relative; margin-bottom: 35px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(17,19,24,0.3) 0%, var(--bg) 100%);
+            transition: background 0.3s;
+        }
+        .hero-content { position: relative; z-index: 1; text-align: center; color: white; padding-top: 150px; }
+        .hero-content h1 { font-size: 3.2rem; margin: 0; font-weight: 900; text-shadow: 0 4px 20px rgba(0,0,0,0.9); }
+        .hero-content p { font-size: 1.3rem; margin-top: 5px; color: #cbd5e1; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+
+        .theme-toggle {
+            position: absolute; top: 20px; right: 20px; z-index: 10;
+            background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px; border-radius: 30px; cursor: pointer;
+            font-family: inherit; font-weight: bold; backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+        .theme-toggle:hover { background: rgba(0,0,0,0.8); border-color: var(--primary); }
+
+        /* --- UI Elements --- */
+        .neo-flat { background: var(--bg); box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light); border-radius: 16px; transition: all 0.3s; }
+        .neo-inset { background: var(--bg); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); border-radius: 10px; border: none; color: var(--text-main); font-family: inherit; transition: all 0.3s; }
+        .neo-btn { background: var(--bg); border: none; padding: 10px 20px; border-radius: 8px; font-family: inherit; font-weight: bold; cursor: pointer; box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); transition: 0.2s; }
+        .neo-btn:active { box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); }
+
+        /* --- Quick Links --- */
+        .quick-links { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .q-link {
+            text-decoration: none; color: var(--text-main); background: var(--accent-bg);
+            padding: 12px 25px; border-radius: 30px; font-weight: bold; font-size: 0.95rem;
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            transition: 0.2s; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+        }
+        .q-link:active { box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); }
+        .q-link:hover { color: var(--primary); border-color: var(--primary); }
+        .q-link.alert { color: var(--warning); border-color: rgba(245, 158, 11, 0.3); }
+
+        /* --- Accordion Dashboard --- */
+        .accordion-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 50px; }
+        .acc-item { background: var(--bg); border-radius: 12px; box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light); overflow: hidden; transition: all 0.3s;}
+        .acc-btn { width: 100%; padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; background: transparent; border: none; color: var(--primary); font-size: 1.1rem; font-weight: bold; font-family: inherit; cursor: pointer; }
+        .acc-btn:hover { background: rgba(255,255,255,0.02); }
+        .acc-content { display: none; padding: 25px; background: var(--bg); }
+
+        .calc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; max-width: 400px; margin-left: auto; margin-right: auto; }
+        .calc-input { width: 110px; padding: 10px; text-align: center; font-size: 1.1rem; font-weight: bold; direction: ltr; }
+        
+        .session-box { display: flex; justify-content: space-between; padding: 15px; border-radius: 8px; background: var(--accent-bg); margin-bottom: 12px; opacity: 0.5; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .session-box.active { opacity: 1; border-right: 4px solid var(--success); background: rgba(16, 185, 129, 0.1); }
+
+        /* Wallet Section */
+        .wallet-display { font-size: 3rem; font-weight: 900; text-align: center; margin: 10px 0; color: var(--success); text-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+        .wallet-controls { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
+        /* --- 16-Week Tracker --- */
+        .week-card { padding: 15px 25px; margin-bottom: 25px; }
+        .week-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 5px 0; }
+        .week-header h3 { margin: 0; font-size: 1.25rem; }
+        .week-content { display: none; margin-top: 25px; }
+        .week-content.active { display: block; }
+        
+        .days-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .day-box { padding: 22px; display: flex; flex-direction: column; gap: 15px; }
+        .day-header { border-bottom: 1px solid var(--shadow-light); padding-bottom: 10px; font-size: 1.1rem; }
+
+        .checkbox-wrapper { display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 1rem; }
+        .checkbox-wrapper input { display: none; }
+        .custom-checkbox { width: 24px; height: 24px; border-radius: 6px; display: flex; justify-content: center; align-items: center; color: transparent; transition: 0.2s; background: var(--check-bg); border: 1px solid var(--check-border); box-shadow: 2px 2px 4px var(--shadow-dark); }
+        .checkbox-wrapper input:checked + .custom-checkbox { color: white; background: var(--success); border-color: var(--success); }
+
+        textarea { width: 100%; min-height: 80px; padding: 12px; outline: none; resize: vertical; box-sizing: border-box; font-size:0.95rem; }
+        .upload-btn { display: block; text-align: center; padding: 10px; border-radius: 8px; cursor: pointer; color: var(--primary); font-size: 0.85rem; font-weight: bold; border: 1px dashed var(--primary); }
+        .image-preview { width: 100%; height: 120px; border-radius: 8px; background-size: cover; background-position: center; display: none; cursor: zoom-in; margin-top: 10px;}
+
+        /* --- Trade Gallery --- */
+        .gallery-header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+        .gal-input { padding: 12px; flex: 1; min-width: 150px; font-size: 0.9rem; }
+        .gal-card { position: relative; border-radius: 12px; overflow: hidden; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .gal-img { width: 100%; height: 150px; border-radius: 8px; background-size: cover; background-position: center; cursor: zoom-in; }
+        .gal-badge { position: absolute; top: 15px; right: 15px; padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .gal-badge.profit { background: var(--success); }
+        .gal-badge.loss { background: var(--danger); }
+        .gal-del { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); color: white; width: 25px; height: 25px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; }
+
+        /* Modal Lightbox */
+        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); backdrop-filter: blur(10px); justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg); padding: 35px; border-radius: 20px; width: 90%; max-width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,1); }
+        .modal img { max-width: 95%; max-height: 95%; border-radius: 12px; }
+        
+    </style>
+</head>
+<body>
+
+    <!-- 1. Live Ticker -->
+    <div class="ticker-container">
+        <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+            { "symbols": [ { "proName": "OANDA:XAUUSD", "title": "طلا" }, { "proName": "TVC:DXY", "title": "شاخص دلار" }, { "proName": "BITSTAMP:BTCUSD", "title": "بیت‌کوین" }, { "proName": "CAPITALCOM:US30", "title": "داوجونز" }, { "proName": "OANDA:EURUSD", "title": "یورو/دلار" } ], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": false, "displayMode": "adaptive", "locale": "fa_IR" }
+            </script>
+        </div>
+    </div>
+
+    <!-- 2. Hero Banner & Theme Toggle -->
+    <div class="hero-banner">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️ حالت روشن</button>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>مسیر معامله‌گری حرفه‌ای</h1>
+            <p>تسلط بر بازار، تسلط بر خویشتن است</p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Quick Links Toolbar -->
+        <div class="quick-links">
+            <a href="https://www.tradingview.com/chart/" target="_blank" class="q-link">📊 چارت تریدینگ ویو</a>
+            <a href="https://www.forexfactory.com/" target="_blank" class="q-link">🌐 تقویم اخبار (ForexFactory)</a>
+            <button class="q-link alert" onclick="document.getElementById('checklistModal').style.display='flex'">⚠️ چک‌لیست قبل از ترید</button>
+        </div>
+
+        <!-- Accordion Dashboard -->
+        <div class="accordion-container">
+            
+            <!-- Item: Wallet -->
+            <div class="acc-item">
+                <button class="acc-btn" onclick="toggleAcc(this)">
+                    <span>💼 کیف پول و مدیریت سرمایه من</span> <span>🔻</span>
+                </button>
+                <div class="acc-content">
+                    <p style="text-align:center; color:var(--text-light); margin-top:0;">موجودی فعلی حساب خود را اینجا مدیریت کنید:</p>
+                    <div class="wallet-display" id="wallet-balance">$0.00</div>
+                    <div class="wallet-controls">
+                        <input type="number" id="wallet-input" class="neo-inset calc-input" placeholder="مبلغ ($)" style="width: 130px;">
+                        <button class="neo-btn" style="color:var(--success);" onclick="updateWallet('add')">➕ واریز / ثبت سود</button>
+                        <button class="neo-btn" style="color:var(--danger);" onclick="updateWallet('sub')">➖ برداشت / ثبت ضرر</button>
+                        <button class="neo-btn" style="color:var(--text-light);" onclick="updateWallet('set')">🔄 تنظیم مجدد</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item: Position Size -->
+            <div class="acc-item">
+                <button class="acc-btn" onclick="toggleAcc(this)">
+                    <span>🧮 محاسبه‌گر حجم ورود (جلوگیری از کال‌مارجین)</span> <span>🔻</span>
+                </button>
+                <div class="acc-content">
+                    <div class="calc-row"><span>موجودی حساب ($):</span> <input type="number" id="calc-bal" class="neo-inset calc-input" value="1000" oninput="calcLot()"></div>
+                    <div class="calc-row"><span>ریسک مجاز (%):</span> <input type="number" id="calc-risk" class="neo-inset calc-input" value="1" step="0.5" oninput="calcLot()"></div>
+                    <div class="calc-row"><span>حد ضرر (به پیپ):</span> <input type="number" id="calc-sl" class="neo-inset calc-input" value="20" oninput="calcLot()"></div>
+                    <div class="calc-result result-good" id="calc-result-lot" style="display:none;"></div>
+                </div>
+            </div>
+
+            <!-- Item: Coin360 Heatmap -->
+            <div class="acc-item">
+                <button class="acc-btn" onclick="toggleAcc(this)">
+                    <span>🗺️ حال و روز بازار (نقشه حرارتی Coin360)</span> <span>🔻</span>
+                </button>
+                <div class="acc-content">
+                    <div style="width: 100%; height: 450px; border-radius: 10px; overflow: hidden; border: 1px solid var(--shadow-light);">
+                        <iframe src="https://coin360.com/widget/map?utm_source=embed_map" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item: Clock & Rules -->
+            <div class="acc-item">
+                <button class="acc-btn" onclick="toggleAcc(this)">
+                    <span>⏱️ ساعت بازار و 🛡️ قوانین طلایی</span> <span>🔻</span>
+                </button>
+                <div class="acc-content" style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: space-around;">
+                    <div style="flex:1; min-width: 250px;">
+                        <div style="text-align: center; font-size: 2rem; font-weight: 900; margin-bottom: 15px; color: var(--primary);" id="live-time">--:--:--</div>
+                        <div class="session-box" id="ses-tokyo"><span>🇯🇵 توکیو</span><span dir="ltr">03:30 - 12:30</span></div>
+                        <div class="session-box" id="ses-london"><span>🇬🇧 لندن</span><span dir="ltr">10:30 - 19:30</span></div>
+                        <div class="session-box" id="ses-ny"><span>🇺🇸 نیویورک</span><span dir="ltr">16:30 - 01:30</span></div>
+                    </div>
+                    <div style="flex:1; min-width: 250px;">
+                        <h4 style="margin-top:0;">قوانین غیرقابل مذاکره:</h4>
+                        <div style="display: flex; gap: 10px; margin-bottom:10px;"><span style="color:var(--danger);">✖</span><span>بعد از ۲ ضرر متوالی، سیستم خاموش.</span></div>
+                        <div style="display: flex; gap: 10px; margin-bottom:10px;"><span style="color:var(--danger);">✖</span><span>ورود بدون Stop Loss ممنوع.</span></div>
+                        <div style="display: flex; gap: 10px;"><span style="color:var(--success);">✔</span><span>ورود فقط در صورت تکمیل ستاپ.</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 16-Week Tracker -->
+        <h2 style="text-align: center; color: var(--text-main); margin-bottom: 30px;">📚 ژورنال و مسیر ۱۶ هفته‌ای آموزش</h2>
+        <div id="app-content"></div>
+
+        <!-- Trade Gallery Section -->
+        <h2 style="text-align: center; color: var(--text-main); margin-top: 60px; margin-bottom: 20px;">🖼️ گالری معاملات (آرشیو سود و ضرر)</h2>
+        <div class="neo-flat" style="padding: 25px;">
+            <p style="text-align:center; color:var(--text-light); margin-top:0; margin-bottom: 20px;">عکس معاملات خود را برای بررسی در پایان ماه اینجا ذخیره کنید.</p>
+            
+            <div class="gallery-header">
+                <input type="text" id="gal-desc" class="neo-inset gal-input" placeholder="توضیح (مثلا: سود عالی روی طلا)">
+                <input type="number" id="gal-pnl" class="neo-inset gal-input" placeholder="مبلغ سود/ضرر (+ یا -)">
+                <label class="q-link" style="margin:0; cursor:pointer; background:var(--primary); color:white;">
+                    ➕ افزودن عکس معامله
+                    <input type="file" hidden accept="image/*" onchange="addGalleryItem(event)">
+                </label>
+            </div>
+            
+            <div id="gallery-grid" class="days-grid">
+                <!-- Gallery items will be injected here -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modals -->
+    <div id="checklistModal" class="modal" onclick="if(event.target.id==='checklistModal') this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 style="color:var(--warning); text-align:center; margin-top:0;">⚠️ توقف! قبل از زدن دکمه ترید</h2>
+            <p style="color: var(--text-light); margin-bottom: 25px; font-size: 1.1rem; text-align:center;">اگر تیک همه موارد را نمی‌توانی بزنی، دست نگه دار!</p>
+            <label style="display:flex; gap:10px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" style="width:20px;height:20px;"> خبر قرمزی در تقویم اقتصادی نداریم.</label>
+            <label style="display:flex; gap:10px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" style="width:20px;height:20px;"> حجم را با ماشین‌حساب (۱٪ ریسک) حساب کردم.</label>
+            <label style="display:flex; gap:10px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" style="width:20px;height:20px;"> حد ضرر (SL) را تعیین کرده‌ام.</label>
+            <label style="display:flex; gap:10px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" style="width:20px;height:20px;"> ذهنم آرام است و ترید انتقامی نیست.</label>
+            <button class="neo-btn" style="width: 100%; padding: 15px; margin-top: 20px; color: var(--warning); font-size: 1.1rem;" onclick="document.getElementById('checklistModal').style.display='none'">تأیید و ورود به بازار</button>
+        </div>
+    </div>
+
+    <div id="imgModal" class="modal" onclick="this.style.display='none'">
+        <span style="position:absolute; top:20px; right:30px; font-size:50px; color:white; cursor:pointer;">&times;</span>
+        <img id="modalImg" src="" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        const weeksData = [
+            "هفته ۱: مفاهیم مقدماتی و چرخه‌های اقتصادی", "هفته ۲: آموزش نرم‌افزارها (متاتریدر)",
+            "هفته ۳: ورود به پرایس اکشن (کندل‌شناسی)", "هفته ۴: روندها، کانال‌ها و سطوح",
+            "هفته ۵: الگوهای قیمتی و ستاپ‌ها (۱)", "هفته ۶: ستاپ‌های پرایس اکشن (۲)",
+            "هفته ۷: مدیریت سرمایه (مهم‌ترین بخش)", "هفته ۸: تحلیل فاندامنتال و اخبار",
+            "هفته ۹: روانشناسی معامله‌گری + پلن", "هفته ۱۰: لایو تریدهای استاد (۱)",
+            "هفته ۱۱: لایو تریدهای استاد (۲)", "هفته ۱۲: گزارش‌های هفتگی و رفع اشکال",
+            "هفته ۱۳: شبیه‌سازی در حساب دمو", "هفته ۱۴: شبیه‌سازی در حساب دمو",
+            "هفته ۱۵: کنترل احساسات در دمو", "هفته ۱۶: آمادگی برای حساب ریل"
+        ];
+
+        let galleryArray = [];
+        let walletTotal = 0;
+
+        function initApp() {
+            const container = document.getElementById('app-content');
+            
+            weeksData.forEach((weekTitle, wIdx) => {
+                const wNum = wIdx + 1;
+                const weekCard = document.createElement('div');
+                weekCard.className = 'week-card neo-flat';
+                
+                const weekHeader = document.createElement('div');
+                weekHeader.className = 'week-header';
+                weekHeader.onclick = () => document.getElementById(`content_w${wNum}`).classList.toggle('active');
+                weekHeader.innerHTML = `<div style="display: flex; gap: 15px;"><span>🔽</span><h3>${weekTitle}</h3></div>`;
+                
+                const weekContent = document.createElement('div');
+                weekContent.className = 'week-content';
+                weekContent.id = `content_w${wNum}`;
+                
+                const daysGrid = document.createElement('div');
+                daysGrid.className = 'days-grid';
+
+                for(let d = 1; d <= 6; d++) {
+                    const dayId = `w${wNum}d${d}`;
+                    const dayBox = document.createElement('div');
+                    dayBox.className = 'day-box neo-flat';
+
+                    dayBox.innerHTML = `
+                        <div class="day-header"><h4>روز ${d}</h4></div>
+                        
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="${dayId}_vid" onchange="saveCheck('${dayId}_vid', this.checked)">
+                            <div class="custom-checkbox">✔</div> <span>محتوا را دیدم / مرور کردم</span>
+                        </label>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="${dayId}_prac" onchange="saveCheck('${dayId}_prac', this.checked)">
+                            <div class="custom-checkbox">✔</div> <span>تمرین چارت انجام شد</span>
+                        </label>
+
+                        <textarea class="neo-inset" id="${dayId}_note" placeholder="نکات استراتژی و ژورنال امروز..." oninput="saveText('${dayId}_note', this.value)"></textarea>
+
+                        <div style="margin-top:5px;">
+                            <label class="upload-btn neo-inset" for="${dayId}_file">📸 آپلود عکس ژورنال</label>
+                            <input type="file" id="${dayId}_file" accept="image/*" hidden onchange="handleSingleImg(event, '${dayId}')">
+                            <div class="image-preview" id="${dayId}_prev" onclick="openImgBase('${dayId}')"></div>
+                        </div>
+                    `;
+                    daysGrid.appendChild(dayBox);
+                }
+
+                const reviewBox = document.createElement('div');
+                reviewBox.style.gridColumn = '1 / -1';
+                reviewBox.className = 'neo-flat';
+                reviewBox.style.padding = '20px';
+                reviewBox.style.borderRight = '4px solid var(--warning)';
+                reviewBox.innerHTML = `
+                    <h4 style="margin-top:0; color:var(--warning); font-size:1.2rem;">📝 مرور آخر هفته</h4>
+                    <textarea class="neo-inset" id="w${wNum}_review" placeholder="بزرگترین درسی که این هفته گرفتم؟" oninput="saveText('w${wNum}_review', this.value)" style="min-height: 70px;"></textarea>
+                `;
+                daysGrid.appendChild(reviewBox);
+
+                weekContent.appendChild(daysGrid);
+                weekCard.appendChild(weekHeader);
+                weekCard.appendChild(weekContent);
+                container.appendChild(weekCard);
+            });
+
+            loadTheme();
+            loadData();
+            loadWallet();
+            loadGallery();
+            startClock();
+            calcLot();
+        }
+
+        // --- Theme Toggle ---
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('p_theme', isLight ? 'light' : 'dark');
+            document.getElementById('themeBtn').innerText = isLight ? '🌙 حالت تاریک' : '☀️ حالت روشن';
+        }
+
+        function loadTheme() {
+            if(localStorage.getItem('p_theme') === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeBtn').innerText = '🌙 حالت تاریک';
+            }
+        }
+
+        // --- Accordion Logic ---
+        function toggleAcc(btn) {
+            const content = btn.nextElementSibling;
+            btn.classList.toggle('active');
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                btn.querySelector('span:last-child').innerText = "🔻";
+            } else {
+                content.style.display = "block";
+                btn.querySelector('span:last-child').innerText = "🔺";
+            }
+        }
+
+        // --- Wallet Logic ---
+        function loadWallet() {
+            walletTotal = parseFloat(localStorage.getItem('wallet_balance')) || 0;
+            document.getElementById('wallet-balance').innerText = `$${walletTotal.toFixed(2)}`;
+            // Update calculator balance automatically
+            document.getElementById('calc-bal').value = walletTotal > 0 ? walletTotal : 1000;
+        }
+
+        function updateWallet(action) {
+            const inputVal = parseFloat(document.getElementById('wallet-input').value);
+            if(!inputVal && action !== 'set') return;
+
+            if(action === 'add') walletTotal += inputVal;
+            else if(action === 'sub') walletTotal -= inputVal;
+            else if(action === 'set') walletTotal = inputVal || 0;
+
+            localStorage.setItem('wallet_balance', walletTotal);
+            document.getElementById('wallet-input').value = '';
+            loadWallet();
+            calcLot();
+        }
+
+        // --- Gallery Logic ---
+        function loadGallery() {
+            galleryArray = JSON.parse(localStorage.getItem('trade_gallery')) || [];
+            renderGallery();
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = '';
+            
+            if(galleryArray.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; color:var(--text-light); grid-column:1/-1;">گالری خالی است. اولین معامله خود را ثبت کنید!</p>';
+                return;
+            }
+
+            galleryArray.forEach(item => {
+                const isProfit = item.pnl >= 0;
+                const badgeClass = isProfit ? 'profit' : 'loss';
+                const pnlSign = isProfit ? '+' : '';
+                
+                const card = document.createElement('div');
+                card.className = 'gal-card neo-flat';
+                card.innerHTML = `
+                    <div class="gal-del" onclick="deleteGalItem(${item.id})">✖</div>
+                    <div class="gal-badge ${badgeClass}">${pnlSign}$${item.pnl}</div>
+                    <div class="gal-img" style="background-image:url(${item.img})" onclick="openModalImg('${item.img}')"></div>
+                    <div style="padding: 5px; font-size:0.9rem;">
+                        <div style="font-weight:bold; color:var(--text-main); margin-bottom:5px;">${item.desc || 'بدون توضیح'}</div>
+                        <div style="color:var(--text-light); font-size:0.8rem;">تاریخ: ${item.date}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addGalleryItem(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+
+            const pnl = parseFloat(document.getElementById('gal-pnl').value) || 0;
+            const desc = document.getElementById('gal-desc').value;
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600; // Compress heavily for gallery
+                    let w = img.width, h = img.height;
+                    if(w > MAX_WIDTH) { h = Math.round((h * MAX_WIDTH) / w); w = MAX_WIDTH; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    const b64 = canvas.toDataURL('image/jpeg', 0.5);
+                    
+                    const newItem = {
+                        id: Date.now(),
+                        img: b64,
+                        pnl: pnl,
+                        desc: desc,
+                        date: new Date().toLocaleDateString('fa-IR')
+                    };
+
+                    try {
+                        galleryArray.push(newItem);
+                        localStorage.setItem('trade_gallery', JSON.stringify(galleryArray));
+                        
+                        // Clear inputs
+                        document.getElementById('gal-pnl').value = '';
+                        document.getElementById('gal-desc').value = '';
+                        
+                        // Auto update wallet if it's a PnL
+                        if(pnl !== 0 && confirm(`آیا می‌خواهید این مبلغ ($${pnl}) به کیف پول شما اعمال شود؟`)) {
+                            walletTotal += pnl;
+                            localStorage.setItem('wallet_balance', walletTotal);
+                            loadWallet();
+                        }
+                        
+                        renderGallery();
+                    } catch(err) {
+                        alert("⚠️ حافظه مرورگر پر شده است. لطفاً عکس‌های قدیمی گالری را پاک کنید.");
+                    }
+                }
+                img.src = ev.target.result;
+            }
+            reader.readAsDataURL(file);
+            e.target.value = ''; // reset file input
+        }
+
+        function deleteGalItem(id) {
+            if(confirm("آیا از حذف این عکس مطمئن هستید؟")) {
+                galleryArray = galleryArray.filter(item => item.id !== id);
+                localStorage.setItem('trade_gallery', JSON.stringify(galleryArray));
+                renderGallery();
+            }
+        }
+
+        function openModalImg(b64) {
+            document.getElementById('modalImg').src = b64; 
+            document.getElementById('imgModal').style.display = 'flex';
+        }
+
+        // --- Basic Data & 16-Week Tracker ---
+        function saveCheck(id, val) { localStorage.setItem(id, val); }
+        function saveText(id, val) { localStorage.setItem(id, val); }
+
+        function loadData() {
+            for(let i=0; i<localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const val = localStorage.getItem(key);
+                if(key.endsWith('_vid') || key.endsWith('_prac')) {
+                    const el = document.getElementById(key);
+                    if(el) el.checked = (val === 'true');
+                } else if(key.endsWith('_note') || key.endsWith('_review')) {
+                    const el = document.getElementById(key);
+                    if(el) el.value = val;
+                } else if(key.endsWith('_img')) {
+                    const el = document.getElementById(`${key.replace('_img', '')}_prev`);
+                    if(el) { el.style.display = 'block'; el.style.backgroundImage = `url(${val})`; }
+                }
+            }
+        }
+
+        function handleSingleImg(e, dayId) {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600; 
+                    let w = img.width, h = img.height;
+                    if(w > MAX_WIDTH) { h = Math.round((h * MAX_WIDTH) / w); w = MAX_WIDTH; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    const b64 = canvas.toDataURL('image/jpeg', 0.5);
+                    try {
+                        localStorage.setItem(`${dayId}_img`, b64);
+                        const p = document.getElementById(`${dayId}_prev`);
+                        p.style.display = 'block'; p.style.backgroundImage = `url(${b64})`;
+                    } catch(err) { alert("⚠️ حافظه پر شده است."); }
+                }
+                img.src = ev.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function openImgBase(dayId) {
+            const b64 = localStorage.getItem(`${dayId}_img`);
+            if(b64) { document.getElementById('modalImg').src = b64; document.getElementById('imgModal').style.display = 'flex'; }
+        }
+
+        // --- Calculators ---
+        function calcLot() {
+            const bal = parseFloat(document.getElementById('calc-bal').value) || 0;
+            const riskPct = parseFloat(document.getElementById('calc-risk').value) || 0;
+            const slPips = parseFloat(document.getElementById('calc-sl').value) || 0;
+            const res = document.getElementById('calc-result-lot');
+            if (bal > 0 && riskPct > 0 && slPips > 0) {
+                const riskAmount = bal * (riskPct / 100);
+                const lotSize = riskAmount / (slPips * 10);
+                res.style.display = 'block';
+                res.innerHTML = `حجم ورود: <span style="font-size:1.5rem;">${lotSize.toFixed(2)} Lot</span><br><span style="font-size:0.9rem; font-weight:normal;">(ضرر احتمالی: $${riskAmount.toFixed(2)})</span>`;
+            } else { res.style.display = 'none'; }
+        }
+
+        // --- Clock ---
+        function startClock() {
+            setInterval(() => {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Tehran', hour12: false });
+                document.getElementById('live-time').innerText = timeStr;
+                const [h, m] = timeStr.split(':').map(Number);
+                const timeFloat = h + (m / 60);
+                document.getElementById('ses-tokyo').className = (timeFloat >= 3.5 && timeFloat < 12.5) ? 'session-box active' : 'session-box';
+                document.getElementById('ses-london').className = (timeFloat >= 10.5 && timeFloat < 19.5) ? 'session-box active' : 'session-box';
+                document.getElementById('ses-ny').className = (timeFloat >= 16.5 || timeFloat < 1.5) ? 'session-box active' : 'session-box';
+            }, 1000);
+        }
+
+        window.onload = initApp;
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a068b5820bff931d',t:'MTc4MDU5NDY4Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

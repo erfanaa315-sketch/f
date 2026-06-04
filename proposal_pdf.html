@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<style>
+  @font-face{ font-family:'Vazir'; src:url('fonts/Vazirmatn-Regular.ttf'); font-weight:400; }
+  @font-face{ font-family:'Vazir'; src:url('fonts/Vazirmatn-Medium.ttf'); font-weight:500; }
+  @font-face{ font-family:'Vazir'; src:url('fonts/Vazirmatn-Bold.ttf'); font-weight:700; }
+  @font-face{ font-family:'Vazir'; src:url('fonts/Vazirmatn-Black.ttf'); font-weight:900; }
+
+  @page{
+    size:A4; margin:18mm 14mm 20mm 14mm;
+    @bottom-center{
+      content:"دستیار معامله‌گری حرفه‌ای Poursamadi  ·  صفحه " counter(page) " از " counter(pages);
+      font-family:'Vazir'; font-size:8pt; color:#8a93a6;
+    }
+  }
+  @page cover{ margin:0; @bottom-center{content:none;} }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ font-family:'Vazir',sans-serif; color:#1f2733; font-size:10.5pt; line-height:1.95; }
+
+  /* ============ COVER ============ */
+  .cover{
+    page:cover; height:297mm; width:210mm; position:relative; overflow:hidden;
+    background:
+      radial-gradient(circle at 78% 18%, rgba(34,211,238,.55), transparent 42%),
+      radial-gradient(circle at 18% 82%, rgba(59,130,246,.55), transparent 45%),
+      linear-gradient(160deg,#0a0e1a 0%, #111a2e 55%, #0b1322 100%);
+    color:#fff;
+  }
+  .cover .grid-lines{ position:absolute; inset:0; opacity:.10;
+    background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);
+    background-size:26px 26px; }
+  .cover .glow{ position:absolute; width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle, rgba(34,211,238,.30), transparent 70%); top:-90px; left:-90px; }
+  .cover-inner{ position:relative; padding:42mm 22mm 0; }
+  .kicker{ display:inline-block; padding:7px 20px; border-radius:30px; font-size:9pt; font-weight:700;
+    background:rgba(34,211,238,.15); border:1px solid rgba(34,211,238,.45); color:#67e8f9; margin-bottom:30px; }
+  .cover h1{ font-size:40pt; font-weight:900; line-height:1.25; margin-bottom:14px; color:#fff; }
+  .cover h1 .hl{ color:#38bdf8; }
+  .cover .sub{ font-size:14pt; color:#c3d0e4; max-width:135mm; line-height:1.9; }
+  .cover .tag{ margin-top:18px; font-size:12pt; color:#5eead4; font-weight:700; }
+
+  .cover-chips{ position:absolute; bottom:62mm; right:22mm; left:22mm; display:flex; flex-wrap:wrap; gap:9px; justify-content:center; }
+  .cchip{ background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:12px;
+    padding:10px 14px; font-size:9pt; font-weight:700; color:#e6eefc; white-space:nowrap; }
+  .cchip b{ color:#5eead4; }
+
+  .cover-foot{ position:absolute; bottom:0; right:0; left:0; padding:14mm 22mm; 
+    border-top:1px solid rgba(255,255,255,.12); display:flex; justify-content:space-between; color:#9fb0cc; font-size:9.5pt; }
+  .cover-foot .v{ color:#38bdf8; font-weight:700; }
+
+  /* ============ GENERIC ============ */
+  .page-break{ page-break-before:always; }
+  .section{ margin-bottom:9mm; }
+  .eyebrow{ color:#0ea5b7; font-weight:700; font-size:9pt; letter-spacing:1px; margin-bottom:4px; }
+  h2{ font-size:18pt; font-weight:900; color:#0f1b2d; margin-bottom:6px; position:relative; padding-right:14px; }
+  h2::before{ content:''; position:absolute; right:0; top:6px; bottom:6px; width:5px; border-radius:4px;
+    background:linear-gradient(#3b82f6,#22d3ee); }
+  .lead{ color:#54627a; font-size:10.5pt; margin-bottom:8px; }
+
+  /* TOC */
+  .toc{ background:#f4f8fd; border:1px solid #e2ecf7; border-radius:14px; padding:8mm; }
+  .toc-row{ display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px dashed #d9e6f3; }
+  .toc-row:last-child{ border-bottom:none; }
+  .toc-no{ width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#3b82f6,#22d3ee); color:#fff;
+    font-weight:900; font-size:11pt; display:flex; align-items:center; justify-content:center; }
+  .toc-t{ font-weight:700; font-size:11pt; color:#16263d; flex:1; }
+  .toc-d{ color:#7a879c; font-size:9pt; }
+
+  /* stat cards */
+  .stat-row{ display:flex; gap:10px; margin:6mm 0; }
+  .stat{ flex:1; border-radius:14px; padding:14px 10px; text-align:center; color:#fff; }
+  .stat.b1{ background:linear-gradient(150deg,#2563eb,#3b82f6); }
+  .stat.b2{ background:linear-gradient(150deg,#0891b2,#22d3ee); }
+  .stat.b3{ background:linear-gradient(150deg,#059669,#10b981); }
+  .stat.b4{ background:linear-gradient(150deg,#7c3aed,#a78bfa); }
+  .stat .n{ font-size:20pt; font-weight:900; }
+  .stat .l{ font-size:8.5pt; opacity:.95; margin-top:2px; }
+
+  /* problem / solution */
+  .ps{ display:flex; gap:10px; margin-top:5mm; }
+  .ps .col{ flex:1; border-radius:14px; padding:6mm; }
+  .ps .prob{ background:#fff4f4; border:1px solid #ffd9d9; }
+  .ps .sol{ background:#f0fbf6; border:1px solid #c7eedd; }
+  .ps h3{ font-size:12pt; margin-bottom:8px; }
+  .ps .prob h3{ color:#dc2626; }
+  .ps .sol h3{ color:#059669; }
+  .ps ul{ list-style:none; }
+  .ps li{ font-size:9.5pt; margin-bottom:7px; padding-right:20px; position:relative; color:#33404f; line-height:1.7; }
+  .ps .prob li::before{ content:'✕'; position:absolute; right:0; color:#ef4444; font-weight:900; }
+  .ps .sol li::before{ content:'✓'; position:absolute; right:0; color:#10b981; font-weight:900; }
+
+  /* feature breakdown cards (ریز به ریز) */
+  .fb{ border:1px solid #e6edf5; border-radius:14px; padding:6mm; margin-bottom:5mm; page-break-inside:avoid;
+    background:linear-gradient(180deg,#ffffff,#fafcff); }
+  .fb-head{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .fb-ic{ width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:17pt; font-weight:900; color:#fff; flex-shrink:0; line-height:1; }
+  .fb-ttl{ flex:1; }
+  .fb-ttl .t{ font-size:13pt; font-weight:900; color:#13233a; }
+  .fb-ttl .s{ font-size:9pt; color:#7a879c; }
+  .fb-tag{ font-size:7.5pt; font-weight:700; padding:3px 9px; border-radius:20px; }
+  .tag-new{ background:#f1e9ff; color:#7c3aed; }
+  .tag-up{ background:#e8f3ff; color:#2563eb; }
+  .tag-core{ background:#e9f7f0; color:#059669; }
+  .fb-body{ font-size:10pt; color:#3a4759; margin-bottom:6px; }
+  .fb-list{ list-style:none; margin-top:6px; }
+  .fb-list li{ font-size:9.3pt; color:#46566b; margin-bottom:5px; padding-right:18px; position:relative; line-height:1.7; }
+  .fb-list li::before{ content:'◆'; position:absolute; right:0; color:#22d3ee; font-size:7pt; top:3px; }
+
+  /* gradient bg helpers for icons */
+  .g-blue{ background:linear-gradient(135deg,#2563eb,#3b82f6); }
+  .g-cyan{ background:linear-gradient(135deg,#0891b2,#22d3ee); }
+  .g-green{ background:linear-gradient(135deg,#059669,#10b981); }
+  .g-amber{ background:linear-gradient(135deg,#d97706,#f59e0b); }
+  .g-purple{ background:linear-gradient(135deg,#7c3aed,#a78bfa); }
+  .g-rose{ background:linear-gradient(135deg,#e11d48,#fb7185); }
+  .g-slate{ background:linear-gradient(135deg,#475569,#64748b); }
+
+  /* phases */
+  .phases{ display:flex; gap:8px; margin-top:5mm; }
+  .ph{ flex:1; border-radius:12px; padding:5mm; color:#fff; }
+  .ph .num{ font-size:8pt; opacity:.9; font-weight:700; }
+  .ph .t{ font-size:11pt; font-weight:900; margin:3px 0; }
+  .ph .d{ font-size:8pt; opacity:.95; line-height:1.6; }
+
+  /* tech chips */
+  .tch{ display:flex; flex-wrap:wrap; gap:8px; margin-top:5mm; }
+  .tch span{ background:#eef4fb; border:1px solid #dde9f6; border-radius:30px; padding:8px 16px; font-size:9.5pt; font-weight:700; color:#27384f; }
+
+  /* roadmap timeline */
+  .rm{ margin-top:5mm; border-right:2px solid #dbe6f3; padding-right:8mm; }
+  .rm-item{ position:relative; margin-bottom:6mm; page-break-inside:avoid; }
+  .rm-item::before{ content:''; position:absolute; right:-10.4mm; top:3px; width:13px; height:13px; border-radius:50%;
+    background:linear-gradient(135deg,#3b82f6,#22d3ee); border:3px solid #fff; box-shadow:0 0 0 2px #cfe2f5; }
+  .rm-w{ font-size:9pt; font-weight:700; color:#0ea5b7; }
+  .rm-t{ font-size:11.5pt; font-weight:900; color:#16263d; margin:2px 0; }
+  .rm-d{ font-size:9.5pt; color:#54627a; }
+
+  /* callout */
+  .callout{ background:linear-gradient(150deg,#0f1b2e,#16263f); color:#dbe7f7; border-radius:16px; padding:7mm; margin-top:6mm; }
+  .callout h3{ color:#5eead4; font-size:13pt; margin-bottom:6px; }
+  .callout p{ font-size:10pt; line-height:1.9; color:#c6d4e8; }
+
+  .mini-note{ font-size:8.5pt; color:#8a93a6; margin-top:3px; }
+  .data-table{ width:100%; border-collapse:collapse; margin-top:5mm; font-size:9pt; }
+  .data-table th{ background:#f1f6fc; color:#27384f; padding:8px; text-align:right; border:1px solid #e2ecf7; font-weight:700; }
+  .data-table td{ padding:8px; border:1px solid #eef3f9; color:#3a4759; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="grid-lines"></div>
+  <div class="glow"></div>
+  <div class="cover-inner">
+    <span class="kicker">پروپوزال محصول · نسخه ۲٫۰</span>
+    <h1>دستیار معامله‌گری<br><span class="hl">حرفه‌ای</span> Poursamadi</h1>
+    <p class="sub">یک پلتفرم آموزشی و ابزاری همه‌جانبه که مسیر تبدیل‌شدن از مبتدی به یک تریدر منضبط را در یک محیط واحد، آفلاین و زیبا گرد هم می‌آورد.</p>
+    <p class="tag">«تسلط بر بازار، تسلط بر خویشتن است»</p>
+  </div>
+
+  <div class="cover-chips">
+    <div class="cchip"><b>۱۶</b> هفته آموزش</div>
+    <div class="cchip"><b>۹۶</b> جلسه روزانه</div>
+    <div class="cchip"><b>۱۲+</b> ابزار تریدر</div>
+    <div class="cchip"><b>۱۰۰٪</b> آفلاین</div>
+  </div>
+
+  <div class="cover-foot">
+    <div>سند پیشنهاد محصول &nbsp;|&nbsp; محرمانه</div>
+    <div>نسخه <span class="v">2.0</span> &nbsp;·&nbsp; خرداد ۱۴۰۵</div>
+  </div>
+</div>
+
+<!-- ============ TOC ============ -->
+<div class="page-break"></div>
+<div class="section">
+  <div class="eyebrow">فهرست مطالب</div>
+  <h2>در این سند چه می‌خوانید؟</h2>
+  <div class="toc">
+    <div class="toc-row"><div class="toc-no">۱</div><div class="toc-t">معرفی و چشم‌انداز محصول</div><div class="toc-d">صفحه ۲</div></div>
+    <div class="toc-row"><div class="toc-no">۲</div><div class="toc-t">مشکل و راهکار</div><div class="toc-d">صفحه ۳</div></div>
+    <div class="toc-row"><div class="toc-no">۳</div><div class="toc-t">شرح ریزبه‌ریز بخش‌های پروژه</div><div class="toc-d">صفحه ۴–۷</div></div>
+    <div class="toc-row"><div class="toc-no">۴</div><div class="toc-t">معماری آموزشی چهار فاز</div><div class="toc-d">صفحه ۸</div></div>
+    <div class="toc-row"><div class="toc-no">۵</div><div class="toc-t">مشخصات فنی</div><div class="toc-d">صفحه ۸</div></div>
+    <div class="toc-row"><div class="toc-no">۶</div><div class="toc-t">نقشه راه آینده</div><div class="toc-d">صفحه ۹</div></div>
+  </div>
+</div>
+
+<!-- ============ 1. OVERVIEW ============ -->
+<div class="page-break"></div>
+<div class="section">
+  <div class="eyebrow">۱ · معرفی</div>
+  <h2>یک محصول، کل سفر یک تریدر</h2>
+  <p class="lead">این پروژه یک اپلیکیشن تک‌فایلی (Single-File) مبتنی بر مرورگر است که سه نیاز اصلی یک معامله‌گرِ در حال یادگیری را پوشش می‌دهد:
+    <b>آموزش منظم</b>، <b>انضباط و روانشناسی</b>، و <b>ابزارهای عملیاتی</b>. تمام داده‌ها به‌صورت محلی و امن روی دستگاه کاربر ذخیره می‌شوند؛ بدون سرور، بدون اشتراک ماهانه و بدون وابستگی به اینترنت.</p>
+
+  <div class="stat-row">
+    <div class="stat b1"><div class="n">۱۶</div><div class="l">هفته مسیر آموزشی</div></div>
+    <div class="stat b2"><div class="n">۹۶</div><div class="l">جلسه روزانه زمان‌بندی‌شده</div></div>
+    <div class="stat b3"><div class="n">۱۲+</div><div class="l">ابزار کاربردی</div></div>
+    <div class="stat b4"><div class="n">۱۰۰٪</div><div class="l">آفلاین · بدون VPN</div></div>
+  </div>
+
+  <div class="callout">
+    <h3>چرا این محصول متفاوت است؟</h3>
+    <p>اغلب ابزارهای موجود یا فقط آموزش‌اند یا فقط ژورنال. اینجا برای نخستین‌بار <b>یادگیری ساختاریافته</b>، <b>گیمیفیکیشن انضباط</b> و <b>ابزارهای اجرایی</b> در یک تجربه‌ی واحد، یکپارچه و کاملاً فارسی ترکیب شده‌اند — به‌گونه‌ای که کاربر از روز اول تا ورود به حساب واقعی، نیاز به هیچ ابزار دیگری ندارد.</p>
+  </div>
+</div>
+
+<!-- ============ 2. PROBLEM / SOLUTION ============ -->
+<div class="page-break"></div>
+<div class="section">
+  <div class="eyebrow">۲ · مسئله</div>
+  <h2>مشکلی که حل می‌کنیم</h2>
+  <p class="lead">مسیر یادگیری معامله‌گری پر از پراکندگی، بی‌انضباطی و نبود سنجش است. این محصول دقیقاً همین شکاف‌ها را پر می‌کند.</p>
+  <div class="ps">
+    <div class="col prob">
+      <h3>وضعیت فعلی تریدر مبتدی</h3>
+      <ul>
+        <li>آموزش‌ها پراکنده‌اند و مسیر مشخصی ندارند</li>
+        <li>ژورنال نمی‌نویسد و اشتباهاتش را تکرار می‌کند</li>
+        <li>معاملات احساسی و بی‌انضباط، حساب را نابود می‌کند</li>
+        <li>ابزارها در ده‌ها سایت و اپ مختلف پخش‌اند</li>
+        <li>هیچ معیاری برای سنجش پیشرفت یادگیری ندارد</li>
+        <li>وابستگی به اینترنت/VPN، استفاده را مختل می‌کند</li>
+      </ul>
+    </div>
+    <div class="col sol">
+      <h3>راهکار ما</h3>
+      <ul>
+        <li>مسیر ۱۶ هفته‌ای با جلسه و زمان تخمینی هر روز</li>
+        <li>ژورنال معاملات کامل با آمار خودکار عملکرد</li>
+        <li>سیستم استریک، نشان و کوییز برای ساخت عادت</li>
+        <li>همه ابزارها در یک داشبورد یکپارچه و زیبا</li>
+        <li>نوار پیشرفت، امتیاز تسلط و داشبورد آماری زنده</li>
+        <li>کارکرد کامل آفلاین با جایگزین محلی ویجت‌ها</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 3. SECTION-BY-SECTION BREAKDOWN ============ -->
+<div class="page-break"></div>
+<div class="section">
+  <div class="eyebrow">۳ · معماری محصول</div>
+  <h2>شرح ریزبه‌ریز بخش‌های پروژه</h2>
+  <p class="lead">در ادامه، هر بخش از اپلیکیشن به‌تفکیک معرفی شده است: کارکرد، اجزای داخلی و فایده‌ی آن برای تریدر.</p>
+
+  <!-- 1 Ticker -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-slate">۱</div>
+      <div class="fb-ttl"><div class="t">۱. تیکر قیمت زنده</div><div class="s">نوار بالای صفحه</div></div>
+      <span class="fb-tag tag-core">پایه</span>
+    </div>
+    <div class="fb-body">نمایش لحظه‌ای قیمت دارایی‌های کلیدی از طریق ویجت TradingView، تا کاربر بدون ترک صفحه از نبض بازار باخبر باشد.</div>
+    <ul class="fb-list">
+      <li>نمادها: طلا (XAUUSD)، شاخص دلار (DXY)، بیت‌کوین، داوجونز و یورو/دلار</li>
+      <li><b>جایگزین آفلاین:</b> در نبود اینترنت/VPN، یک تیکر متحرک محلی با پیام راهنما نمایش داده می‌شود</li>
+    </ul>
+  </div>
+
+  <!-- 2 Hero + Theme -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-blue">۲</div>
+      <div class="fb-ttl"><div class="t">۲. بنر اصلی و تغییر تم</div><div class="s">هدر بصری</div></div>
+      <span class="fb-tag tag-core">پایه</span>
+    </div>
+    <div class="fb-body">هویت بصری محصول با شعار انگیزشی، به‌همراه کلید تعویض حالت روشن/تاریک که انتخاب کاربر را به‌خاطر می‌سپارد.</div>
+    <ul class="fb-list">
+      <li>دو تم کامل روشن و تاریک با ذخیره‌ی ترجیح در حافظه‌ی محلی</li>
+      <li>طراحی نئومورفیک (Neumorphism) برای حسی نرم و مدرن</li>
+    </ul>
+  </div>
+
+  <!-- 3 Quick Links -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-cyan">۳</div>
+      <div class="fb-ttl"><div class="t">۳. نوار میانبرها</div><div class="s">دسترسی سریع</div></div>
+      <span class="fb-tag tag-up">ارتقا یافته</span>
+    </div>
+    <div class="fb-body">دسترسی یک‌کلیکی به مهم‌ترین ابزارها و منابع بیرونی و داخلی.</div>
+    <ul class="fb-list">
+      <li>لینک به چارت TradingView و تقویم اخبار ForexFactory</li>
+      <li>پرش سریع به ژورنال معاملات و کتابخانه ستاپ‌ها</li>
+      <li>باز کردن واژه‌نامه و چک‌لیست قبل از ترید</li>
+    </ul>
+  </div>
+
+  <!-- 4 Dashboard accordion -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-green">۴</div>
+      <div class="fb-ttl"><div class="t">۴. داشبورد ابزارها (آکاردئونی)</div><div class="s">چهار ابزار جمع‌وجور</div></div>
+      <span class="fb-tag tag-core">پایه</span>
+    </div>
+    <div class="fb-body">چهار ابزار پرکاربرد به‌صورت پنل‌های بازشونده، تا فضای صفحه شلوغ نشود.</div>
+    <ul class="fb-list">
+      <li><b>کیف پول:</b> ثبت موجودی، واریز/برداشت و ثبت سود/ضرر</li>
+      <li><b>محاسبه‌گر حجم ورود:</b> تعیین لات بر اساس درصد ریسک و حد ضرر برای جلوگیری از کال‌مارجین</li>
+      <li><b>نقشه حرارتی بازار:</b> ویجت Coin360 (با جایگزین آفلاین)</li>
+      <li><b>ساعت بازار و قوانین طلایی:</b> سشن‌های زنده‌ی توکیو/لندن/نیویورک + قوانین غیرقابل مذاکره</li>
+    </ul>
+  </div>
+
+  <!-- 5 16-week journey -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-blue">۵</div>
+      <div class="fb-ttl"><div class="t">۵. مسیر آموزشی ۱۶ هفته‌ای</div><div class="s">قلب محصول</div></div>
+      <span class="fb-tag tag-up">ارتقا یافته</span>
+    </div>
+    <div class="fb-body">یک برنامه‌ی یادگیری کامل که هر هفته به ۶ جلسه‌ی روزانه تقسیم شده و هر جلسه عنوان موضوعی و زمان تخمینی مشخص دارد.</div>
+    <ul class="fb-list">
+      <li>هر روز: عنوان جلسه + زمان پیشنهادی (مثلاً «کندل‌های برگشتی · ۵۰ دقیقه»)</li>
+      <li>۴ مرحله‌ی یادگیری برای هر روز: دیدن محتوا، خلاصه‌برداری، تمرین چارت، مرور</li>
+      <li>سطح تسلط ۵ ستاره‌ای، درجه‌ی دشواری و ثبت زمان واقعی مطالعه</li>
+      <li>ژورنال نکات، فلش‌کارت مرور، تگ‌گذاری و آپلود عکس چارت برای هر روز</li>
+      <li>نوار پیشرفت هر هفته + خودارزیابی پایان هفته</li>
+      <li>دسته‌بندی در ۴ فاز: فاز پایه · فاز استراتژی · فاز روانشناسی · فاز تمرین</li>
+    </ul>
+  </div>
+
+  <!-- 6 Progress dashboard -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-cyan">۶</div>
+      <div class="fb-ttl"><div class="t">۶. داشبورد پیشرفت</div><div class="s">بالای بخش آموزش</div></div>
+      <span class="fb-tag tag-up">ارتقا یافته</span>
+    </div>
+    <div class="fb-body">سنجه‌های زنده‌ای که میزان پیشرفت کاربر در مسیر یادگیری را به‌صورت لحظه‌ای نشان می‌دهند.</div>
+    <ul class="fb-list">
+      <li>نوار پیشرفت کلی (روزهای تکمیل‌شده از ۹۶)</li>
+      <li>هفته‌ی فعال، مجموع ساعت مطالعه و امتیاز تسلط کل</li>
+      <li>اعداد فارسی و به‌روزرسانی خودکار با هر فعالیت</li>
+    </ul>
+  </div>
+
+  <!-- 7 Gallery -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-purple">۷</div>
+      <div class="fb-ttl"><div class="t">۷. گالری معاملات</div><div class="s">آرشیو تصویری</div></div>
+      <span class="fb-tag tag-core">پایه</span>
+    </div>
+    <div class="fb-body">بایگانی تصویری معاملات با برچسب سود/ضرر، برای مرور و درس‌گرفتن در پایان ماه.</div>
+    <ul class="fb-list">
+      <li>آپلود کاملاً آفلاین با فشرده‌سازی خودکار تصویر</li>
+      <li>اتصال اختیاری مبلغ سود/ضرر به کیف پول</li>
+      <li>نمایش بزرگ تصویر (Lightbox) و امکان حذف</li>
+    </ul>
+  </div>
+
+  <!-- 8 Trade Journal (NEW) -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-green">۸</div>
+      <div class="fb-ttl"><div class="t">۸. ژورنال معاملات کامل</div><div class="s">سنجش داده‌محور عملکرد</div></div>
+      <span class="fb-tag tag-new">جدید</span>
+    </div>
+    <div class="fb-body">یک ژورنال حرفه‌ای که هر معامله را ثبت و آمار عملکرد را به‌صورت خودکار محاسبه می‌کند تا تصمیمات احساسی جای خود را به تصمیمات آماری بدهند.</div>
+    <ul class="fb-list">
+      <li>ثبت هر معامله: تاریخ، نماد، جهت، حجم، سود/زیان، R، دلیل ورود و احساس</li>
+      <li>محاسبه‌ی خودکار: <b>نرخ برد، سود خالص، Profit Factor و میانگین R</b></li>
+      <li>جدول مرتب و رنگی + امکان حذف هر ردیف</li>
+      <li>خروجی <b>CSV</b> برای تحلیل بیرونی یا ارائه به مربی</li>
+    </ul>
+  </div>
+
+  <!-- 9 Streak & Badges (NEW) -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-amber">۹</div>
+      <div class="fb-ttl"><div class="t">۹. استریک و نشان‌های افتخار</div><div class="s">گیمیفیکیشن انضباط</div></div>
+      <span class="fb-tag tag-new">جدید</span>
+    </div>
+    <div class="fb-body">سیستمی انگیزشی برای ساخت عادت روزانه؛ تداوم به یک بازی تبدیل می‌شود و کاربر برای حفظ زنجیره‌ی فعالیتش تشویق می‌شود.</div>
+    <ul class="fb-list">
+      <li>شمارش روزهای پیاپی فعالیت + ثبت رکورد شخصی</li>
+      <li>۸ نشان افتخار از «اولین قدم» تا «انضباط فولادی»</li>
+      <li>باز شدن خودکار نشان‌ها با ثبت معامله، ساخت ستاپ و قبولی در کوییز</li>
+    </ul>
+  </div>
+
+  <!-- 10 Weekly Quiz (NEW) -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-blue">۱۰</div>
+      <div class="fb-ttl"><div class="t">۱۰. کوییز پایان هفته با قفل</div><div class="s">تثبیت یادگیری</div></div>
+      <span class="fb-tag tag-new">جدید</span>
+    </div>
+    <div class="fb-body">آزمون پایان هر هفته که یادگیری را می‌سنجد و مانع از رد شدن سطحی از مطالب می‌شود.</div>
+    <ul class="fb-list">
+      <li>سؤالات چندگزینه‌ای با نمایش رنگی پاسخ درست/غلط</li>
+      <li>نمره‌دهی آنی؛ <b>هفته‌ی بعد تا کسب حداقل ۷۰٪ قفل می‌ماند</b></li>
+      <li>ذخیره‌ی وضعیت قبولی و نمره برای هر هفته</li>
+    </ul>
+  </div>
+
+  <!-- 11 Glossary (NEW) -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-cyan">۱۱</div>
+      <div class="fb-ttl"><div class="t">۱۱. واژه‌نامه اصطلاحات ترید</div><div class="s">مرجع سریع</div></div>
+      <span class="fb-tag tag-new">جدید</span>
+    </div>
+    <div class="fb-body">دیکشنری جامع اصطلاحات بازار با تعاریف فارسی روان، در دسترس از هر کجای برنامه.</div>
+    <ul class="fb-list">
+      <li>بیش از ۳۰ اصطلاح کلیدی، دسته‌بندی‌شده (پایه، تکنیکال، روانشناسی و...)</li>
+      <li>جست‌وجوی آنی به فارسی و انگلیسی</li>
+      <li>نمایش در مودال تمیز و خوانا</li>
+    </ul>
+  </div>
+
+  <!-- 12 Setup Library (NEW) -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-purple">۱۲</div>
+      <div class="fb-ttl"><div class="t">۱۲. کتابخانه ستاپ‌های شخصی</div><div class="s">وفاداری به پلن</div></div>
+      <span class="fb-tag tag-new">جدید</span>
+    </div>
+    <div class="fb-body">بایگانی ستاپ‌های برنده با قوانین دقیق، تا کاربر همیشه به استراتژی خود پایبند بماند.</div>
+    <ul class="fb-list">
+      <li>ثبت نام ستاپ، تایم‌فریم و حداقل نسبت R:R</li>
+      <li>قوانین دقیق ورود و خروج + نکات و فیلترها</li>
+      <li>نمایش کارتی مرتب و امکان حذف</li>
+    </ul>
+  </div>
+
+  <!-- 13 Checklist -->
+  <div class="fb">
+    <div class="fb-head">
+      <div class="fb-ic g-rose">۱۳</div>
+      <div class="fb-ttl"><div class="t">۱۳. چک‌لیست قبل از ترید</div><div class="s">سدّ تصمیم احساسی</div></div>
+      <span class="fb-tag tag-core">پایه</span>
+    </div>
+    <div class="fb-body">یک مودال هشداردهنده که پیش از هر معامله، کاربر را وادار به بازبینی شرایط می‌کند.</div>
+    <ul class="fb-list">
+      <li>کنترل اخبار قرمز، محاسبه‌ی حجم، تعیین حد ضرر و آرامش ذهنی</li>
+      <li>یادآور قوانین انضباطی پیش از ورود به بازار</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ 4. EDUCATIONAL PHASES ============ -->
+<div class="page-break"></div>
+<div class="section">
+  <div class="eyebrow">۴ · معماری آموزشی</div>
+  <h2>چهار فاز تا حساب واقعی</h2>
+  <p class="lead">۱۶ هفته به‌گونه‌ای چیده شده که کاربر گام‌به‌گام از مفاهیم پایه تا آمادگی برای حساب ریل پیش برود.</p>
+  <div class="phases">
+    <div class="ph g-blue"><div class="num">هفته ۱–۲</div><div class="t">فاز پایه</div><div class="d">مفاهیم بازار، چرخه‌های اقتصادی و تسلط بر پلتفرم.</div></div>
+    <div class="ph g-amber"><div class="num">هفته ۳–۸</div><div class="t">فاز استراتژی</div><div class="d">پرایس اکشن، الگوها، ستاپ‌سازی، مدیریت سرمایه و فاندامنتال.</div></div>
+    <div class="ph g-purple"><div class="num">هفته ۹–۱۲</div><div class="t">فاز روانشناسی</div><div class="d">کنترل احساسات، لایو تریدها و گزارش‌گیری عملکرد.</div></div>
+    <div class="ph g-green"><div class="num">هفته ۱۳–۱۶</div><div class="t">فاز تمرین</div><div class="d">شبیه‌سازی دمو، تثبیت انضباط و آمادگی ریل.</div></div>
+  </div>
+
+  <!-- 5. TECH -->
+  <div class="section" style="margin-top:9mm;">
+    <div class="eyebrow">۵ · مشخصات فنی</div>
+    <h2>سبک، امن و بدون دردسر</h2>
+    <p class="lead">یک فایل HTML واحد که هرجا باز شود کار می‌کند — موبایل، دسکتاپ، آنلاین یا آفلاین.</p>
+    <table class="data-table">
+      <tr><th>ویژگی</th><th>توضیح</th></tr>
+      <tr><td>فناوری</td><td>HTML + CSS + JavaScript خالص (بدون فریم‌ورک)</td></tr>
+      <tr><td>ذخیره‌سازی</td><td>LocalStorage مرورگر — داده‌ها روی دستگاه کاربر</td></tr>
+      <tr><td>توزیع</td><td>تک‌فایل · بدون نصب · بدون سرور</td></tr>
+      <tr><td>دسترس‌پذیری</td><td>واکنش‌گرا (Responsive) + دو تم روشن/تاریک</td></tr>
+      <tr><td>آفلاین</td><td>کارکرد کامل بدون اینترنت با جایگزین محلی ویجت‌ها</td></tr>
+      <tr><td>حریم خصوصی</td><td>۱۰۰٪ محلی — هیچ داده‌ای به بیرون ارسال نمی‌شود</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============ 6. ROADMAP ============ -->
+<div class="page-break"></div>
+<div class="section">
+  <div class="eyebrow">۶ · نقشه راه</div>
+  <h2>قدم‌های بعدی محصول</h2>
+  <p class="lead">فاز اول کامل شده است؛ گام‌های بعدی برای تبدیل این محصول به یک مرجع کامل تریدر.</p>
+  <div class="rm">
+    <div class="rm-item"><div class="rm-w">فاز ۱ — تکمیل‌شده ✓</div><div class="rm-t">هسته‌ی آموزشی + ۵ ابزار جدید</div><div class="rm-d">ژورنال معاملات، استریک/نشان، کوییز هفتگی، واژه‌نامه و کتابخانه ستاپ پیاده‌سازی و تست شد.</div></div>
+    <div class="rm-item"><div class="rm-w">فاز ۲</div><div class="rm-t">نمودار رشد حساب و تحلیل عملکرد</div><div class="rm-d">منحنی Equity، هیت‌مپ تقویمی روزانه و تحلیل خودکار خطاهای تکراری از روی داده‌های ژورنال.</div></div>
+    <div class="rm-item"><div class="rm-w">فاز ۳</div><div class="rm-t">پشتیبان‌گیری و همگام‌سازی</div><div class="rm-d">خروجی/ورودی کامل JSON، خروجی PDF از ژورنال و نسخه‌ی نصب‌شدنی PWA برای موبایل.</div></div>
+    <div class="rm-item"><div class="rm-w">فاز ۴</div><div class="rm-t">محتوای آموزشی غنی</div><div class="rm-d">اتصال ویدیو به هر جلسه، فلش‌کارت‌های هوشمند با یادآوری زمان‌بندی‌شده و کتابخانه‌ی ستاپ‌های آماده.</div></div>
+  </div>
+
+  <div class="callout">
+    <h3>جمع‌بندی</h3>
+    <p>«دستیار معامله‌گری حرفه‌ای» نه یک ابزار، بلکه یک <b>همراه کامل مسیر</b> است: از اولین مفهوم تا اولین معامله‌ی واقعی. با ترکیب آموزش ساختاریافته، انضباط گیمیفای‌شده و ابزارهای اجرایی — همه در یک فایل سبک و آفلاین — این محصول آماده‌ی ارائه به کاربران است.</p>
+  </div>
+</div>
+
+</body>
+</html>
