@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دستیار معامله‌گری حرفه‌ای | Poursamadi</title>
+    <style>
+        /* فونت گوگل فقط در صورت دسترسی به اینترنت/VPN لود می‌شود؛ در غیر این صورت fallback محلی استفاده می‌شود */
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
+
+        /* --- Dark Mode (Default) --- */
+        :root {
+            --bg: #111318;
+            --text-main: #e2e8f0;
+            --text-light: #94a3b8;
+            --primary: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --shadow-dark: #0a0b0e;
+            --shadow-light: #181b22;
+            --accent-bg: #1c1f26;
+            --check-bg: #2a2f3a;
+            --check-border: rgba(255,255,255,0.1);
+        }
+
+        /* --- Light Mode --- */
+        body.light-mode {
+            --bg: #f1f5f9;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --shadow-dark: #d1d5db;
+            --shadow-light: #ffffff;
+            --accent-bg: #e2e8f0;
+            --check-bg: #ffffff;
+            --check-border: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Vazir', 'IRANSans', 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0 0 50px 0;
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container { max-width: 1150px; margin: 0 auto; padding: 0 15px; }
+
+        /* --- Live Ticker --- */
+        .ticker-container { width: 100%; min-height: 46px; background: #000; border-bottom: 1px solid #333; position: relative; }
+        /* تیکر محلی جایگزین (در صورت لود نشدن ویجت بدون VPN) */
+        .fallback-ticker { position: absolute; top: 0; left: 0; right: 0; height: 46px; background: #000; color: #e2e8f0; display: flex; align-items: center; overflow: hidden; white-space: nowrap; z-index: 0; }
+        .fallback-ticker .marquee { display: inline-block; padding-right: 100%; animation: ticker-scroll 28s linear infinite; }
+        .fallback-ticker span { margin: 0 22px; font-size: 0.9rem; font-weight: bold; }
+        .fallback-ticker .up { color: #10b981; }
+        .fallback-ticker .down { color: #ef4444; }
+        @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        /* پیام جایگزین برای ویجت‌های iframe وقتی لود نمی‌شوند */
+        .widget-fallback { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; color: var(--text-light); gap: 12px; padding: 20px; box-sizing: border-box; }
+        .widget-fallback a { color: var(--primary); text-decoration: none; font-weight: bold; }
+
+        /* --- Hero Banner --- */
+        .hero-banner {
+            width: 100%; height: 480px;
+            background-image: url('https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover; background-position: center center;
+            position: relative; margin-bottom: 35px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(17,19,24,0.3) 0%, var(--bg) 100%);
+            transition: background 0.3s;
+        }
+        .hero-content { position: relative; z-index: 1; text-align: center; color: white; padding-top: 150px; }
+        .hero-content h1 { font-size: 3.2rem; margin: 0; font-weight: 900; text-shadow: 0 4px 20px rgba(0,0,0,0.9); }
+        .hero-content p { font-size: 1.3rem; margin-top: 5px; color: #cbd5e1; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+
+        .theme-toggle {
+            position: absolute; top: 20px; right: 20px; z-index: 10;
+            background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px; border-radius: 30px; cursor: pointer;
+            font-family: inherit; font-weight: bold; backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+        .theme-toggle:hover { background: rgba(0,0,0,0.8); border-color: var(--primary); }
+
+        /* --- UI Elements --- */
+        .neo-flat { background: var(--bg); box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light); border-radius: 16px; transition: all 0.3s; }
+        .neo-inset { background: var(--bg); box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light); border-radius: 10px; border: none; color: var(--text-main); font-family: inherit; transition: all 0.3s; }
+        .neo-btn { background: var(--bg); border: none; padding: 10px 20px; border-radius: 8px; font-family: inherit; font-weight: bold; cursor: pointer; box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); transition: 0.2s; }
+        .neo-btn:active { box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); }
+
+        /* --- Quick Links --- */
+        .quick-links { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .q-link {
+            text-decoration: none; color: var(--text-main); background: var(--accent-bg);
+            padding: 12px 25px; border-radius: 30px; font-weight: bold; font-size: 0.95rem;
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            transition: 0.2s; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+        }
+        .q-link:active { box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light); }
+        .q-link:hover { color: var(--primary); border-color: var(--primary); }
+        .q-link.alert { color: var(--warning); border-color: rgba(245, 158, 11, 0.3); }
+
+        /* --- Accordion Dashboard --- */
+        .accordion-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 50px; }
+        .acc-item { background: var(--bg); border-radius: 12px; box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light); overflow: hidden; transition: all 0.3s;}
+        .acc-btn { width: 100%; padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; background: transparent; border: none; color: var(--primary); font-size: 1.1rem; font-weight: bold; font-family: inherit; cursor: pointer; }
+        .acc-btn:hover { background: rgba(255,255,255,0.02); }
+        .acc-content { display: none; padding: 25px; background: var(--bg); }
+
+        .calc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; max-width: 400px; margin-left: auto; margin-right: auto; }
+        .calc-input { width: 110px; padding: 10px; text-align: center; font-size: 1.1rem; font-weight: bold; direction: ltr; }
+        
+        .session-box { display: flex; justify-content: space-between; padding: 15px; border-radius: 8px; background: var(--accent-bg); margin-bottom: 12px; opacity: 0.5; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .session-box.active { opacity: 1; border-right: 4px solid var(--success); background: rgba(16, 185, 129, 0.1); }
+
+        /* Wallet Section */
+        .wallet-display { font-size: 3rem; font-weight: 900; text-align: center; margin: 10px 0; color: var(--success); text-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+        .wallet-controls { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
+        /* --- 16-Week Tracker --- */
+        .week-card { padding: 15px 25px; margin-bottom: 25px; }
+        .week-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 5px 0; }
+        .week-header h3 { margin: 0; font-size: 1.25rem; }
+        .week-content { display: none; margin-top: 25px; }
+        .week-content.active { display: block; }
+        
+        .days-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .day-box { padding: 22px; display: flex; flex-direction: column; gap: 15px; }
+        .day-header { border-bottom: 1px solid var(--shadow-light); padding-bottom: 10px; font-size: 1.1rem; }
+
+        .checkbox-wrapper { display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 1rem; }
+        .checkbox-wrapper input { display: none; }
+        .custom-checkbox { width: 24px; height: 24px; border-radius: 6px; display: flex; justify-content: center; align-items: center; color: transparent; transition: 0.2s; background: var(--check-bg); border: 1px solid var(--check-border); box-shadow: 2px 2px 4px var(--shadow-dark); }
+        .checkbox-wrapper input:checked + .custom-checkbox { color: white; background: var(--success); border-color: var(--success); }
+
+        textarea { width: 100%; min-height: 80px; padding: 12px; outline: none; resize: vertical; box-sizing: border-box; font-size:0.95rem; }
+        .upload-btn { display: block; text-align: center; padding: 10px; border-radius: 8px; cursor: pointer; color: var(--primary); font-size: 0.85rem; font-weight: bold; border: 1px dashed var(--primary); }
+        .image-preview { width: 100%; height: 120px; border-radius: 8px; background-size: cover; background-position: center; display: none; cursor: zoom-in; margin-top: 10px;}
+
+        /* --- Trade Gallery --- */
+        .gallery-header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+        .gal-input { padding: 12px; flex: 1; min-width: 150px; font-size: 0.9rem; }
+        .gal-card { position: relative; border-radius: 12px; overflow: hidden; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .gal-img { width: 100%; height: 150px; border-radius: 8px; background-size: cover; background-position: center; cursor: zoom-in; }
+        .gal-badge { position: absolute; top: 15px; right: 15px; padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .gal-badge.profit { background: var(--success); }
+        .gal-badge.loss { background: var(--danger); }
+        .gal-del { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); color: white; width: 25px; height: 25px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; }
+
+        /* --- Enhanced Education Section --- */
+        .week-progress-bar { height: 8px; background: var(--accent-bg); border-radius: 10px; overflow: hidden; margin-top: 8px; box-shadow: inset 2px 2px 4px var(--shadow-dark); }
+        .week-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--success)); border-radius: 10px; transition: width 0.4s ease; }
+        .week-meta { font-size: 0.85rem; color: var(--text-light); font-weight: normal; }
+        .week-badge { font-size: 0.78rem; padding: 3px 10px; border-radius: 20px; font-weight: bold; }
+        .phase-foundation { background: rgba(59,130,246,0.15); color: var(--primary); }
+        .phase-strategy { background: rgba(245,158,11,0.15); color: var(--warning); }
+        .phase-psych { background: rgba(139,92,246,0.18); color: #a78bfa; }
+        .phase-practice { background: rgba(16,185,129,0.15); color: var(--success); }
+
+        .day-title { font-size: 1.05rem; font-weight: 900; color: var(--text-main); }
+        .day-time-tag { font-size: 0.8rem; color: var(--primary); background: var(--accent-bg); padding: 2px 10px; border-radius: 20px; font-weight: bold; white-space: nowrap; }
+        .day-topic { font-size: 0.92rem; color: var(--text-light); margin: -4px 0 6px 0; line-height: 1.5; }
+
+        .field-label { font-size: 0.82rem; color: var(--text-light); font-weight: bold; margin-bottom: 4px; display: block; }
+        .difficulty-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .diff-pill { font-size: 0.78rem; padding: 4px 10px; border-radius: 20px; cursor: pointer; background: var(--accent-bg); color: var(--text-light); user-select: none; border: 1px solid transparent; transition: 0.2s; }
+        .diff-pill.active { background: var(--primary); color: #fff; }
+
+        /* Mastery stars */
+        .mastery-stars { display: flex; gap: 6px; font-size: 1.4rem; cursor: pointer; user-select: none; }
+        .mastery-stars .star { color: var(--check-border); transition: 0.15s; }
+        .mastery-stars .star.filled { color: var(--warning); text-shadow: 0 2px 8px rgba(245,158,11,0.4); }
+
+        /* Tags input */
+        .tag-input { width: 100%; padding: 9px 12px; font-size: 0.85rem; box-sizing: border-box; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+        .tag-chip { font-size: 0.75rem; padding: 3px 9px; border-radius: 20px; background: var(--accent-bg); color: var(--primary); font-weight: bold; }
+
+        /* Time tracker per day */
+        .time-tracker { display: flex; align-items: center; gap: 8px; }
+        .time-tracker input { width: 70px; padding: 8px; text-align: center; direction: ltr; }
+
+        /* Mini section title inside day box */
+        .day-section-title { font-size: 0.82rem; font-weight: bold; color: var(--primary); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+
+        /* Overall stats dashboard */
+        .stats-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 18px; margin-bottom: 35px; }
+        .stat-card { padding: 22px; text-align: center; }
+        .stat-card .num { font-size: 2.2rem; font-weight: 900; color: var(--primary); }
+        .stat-card .lbl { font-size: 0.9rem; color: var(--text-light); margin-top: 4px; }
+        .stat-card.green .num { color: var(--success); }
+        .stat-card.amber .num { color: var(--warning); }
+        .stat-card.purple .num { color: #a78bfa; }
+
+        .overall-progress { height: 14px; background: var(--accent-bg); border-radius: 10px; overflow: hidden; box-shadow: inset 3px 3px 6px var(--shadow-dark); margin: 5px 0 30px 0; }
+        .overall-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--success)); transition: width 0.5s; display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.75rem; font-weight:bold; }
+
+        .resource-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--primary); text-decoration: none; background: var(--accent-bg); padding: 6px 12px; border-radius: 8px; margin-top: 4px; font-weight: bold; }
+        .resource-link:hover { color: var(--text-main); }
+
+        .week-tools { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .mini-btn { font-size: 0.8rem; padding: 7px 14px; border-radius: 8px; cursor: pointer; }
+
+        /* --- Section Headings (shared) --- */
+        .section-head { text-align: center; color: var(--text-main); margin-top: 60px; margin-bottom: 8px; }
+        .section-sub { text-align:center; color:var(--text-light); font-size:0.9rem; margin-top:0; margin-bottom: 25px; }
+
+        /* --- Streak & Badges --- */
+        .streak-wrap { display: flex; flex-wrap: wrap; gap: 25px; align-items: center; justify-content: center; padding: 30px 25px; }
+        .streak-flame { text-align: center; min-width: 180px; }
+        .streak-flame .big { font-size: 3.5rem; line-height: 1; }
+        .streak-num { font-size: 3rem; font-weight: 900; color: var(--warning); }
+        .streak-lbl { color: var(--text-light); font-size: 0.9rem; }
+        .badges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; flex: 1; min-width: 280px; }
+        .badge {
+            text-align: center; padding: 16px 10px; border-radius: 14px; background: var(--accent-bg);
+            box-shadow: inset 3px 3px 7px var(--shadow-dark), inset -3px -3px 7px var(--shadow-light);
+            opacity: 0.35; filter: grayscale(1); transition: 0.35s; position: relative;
+        }
+        .badge.earned { opacity: 1; filter: none; box-shadow: 5px 5px 12px var(--shadow-dark), -5px -5px 12px var(--shadow-light); }
+        .badge.earned::after { content:'✓'; position:absolute; top:6px; left:8px; color:var(--success); font-weight:bold; }
+        .badge .ic { font-size: 2.2rem; }
+        .badge .nm { font-weight: bold; font-size: 0.85rem; margin-top: 6px; }
+        .badge .ds { font-size: 0.72rem; color: var(--text-light); margin-top: 3px; }
+
+        /* --- Trade Journal Table --- */
+        .tj-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; align-items: end; }
+        .tj-field { display: flex; flex-direction: column; gap: 5px; }
+        .tj-field input, .tj-field select { padding: 10px; font-size: 0.88rem; }
+        .tj-table-wrap { overflow-x: auto; border-radius: 12px; }
+        table.tj-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+        table.tj-table th, table.tj-table td { padding: 11px 12px; text-align: center; font-size: 0.86rem; border-bottom: 1px solid var(--check-border); white-space: nowrap; }
+        table.tj-table th { color: var(--primary); font-weight: bold; }
+        table.tj-table tr:hover td { background: rgba(255,255,255,0.03); }
+        .pnl-pos { color: var(--success); font-weight: bold; }
+        .pnl-neg { color: var(--danger); font-weight: bold; }
+        .tj-dir { padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: bold; }
+        .tj-dir.buy { background: rgba(16,185,129,0.15); color: var(--success); }
+        .tj-dir.sell { background: rgba(239,68,68,0.15); color: var(--danger); }
+        .tj-del { cursor: pointer; color: var(--danger); font-weight: bold; }
+        .tj-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 22px; }
+
+        /* --- Quiz Modal --- */
+        .quiz-q { margin-bottom: 22px; }
+        .quiz-q .qt { font-weight: bold; margin-bottom: 10px; }
+        .quiz-opt { display: block; padding: 11px 14px; border-radius: 10px; background: var(--accent-bg); margin-bottom: 8px; cursor: pointer; transition: 0.15s; border: 1px solid transparent; }
+        .quiz-opt:hover { border-color: var(--primary); }
+        .quiz-opt input { margin-left: 8px; }
+        .quiz-opt.correct { background: rgba(16,185,129,0.18); border-color: var(--success); }
+        .quiz-opt.wrong { background: rgba(239,68,68,0.18); border-color: var(--danger); }
+        .quiz-result { text-align: center; font-size: 1.3rem; font-weight: 900; margin: 15px 0; }
+        .week-lock { font-size: 0.78rem; color: var(--danger); margin-right: 8px; }
+        .week-pass { font-size: 0.78rem; color: var(--success); margin-right: 8px; }
+
+        /* --- Glossary --- */
+        .gloss-search { width: 100%; padding: 13px 16px; font-size: 0.95rem; box-sizing: border-box; margin-bottom: 18px; }
+        .gloss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
+        .gloss-card { padding: 16px 18px; border-radius: 12px; }
+        .gloss-term { font-weight: 900; color: var(--primary); font-size: 1.02rem; }
+        .gloss-en { font-size: 0.78rem; color: var(--text-light); direction: ltr; display: inline-block; }
+        .gloss-def { font-size: 0.88rem; color: var(--text-main); margin-top: 7px; line-height: 1.6; }
+        .gloss-cat { font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; background: var(--accent-bg); color: var(--text-light); float: left; }
+
+        /* --- Setup Library --- */
+        .setup-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .setup-form input, .setup-form textarea, .setup-form select { padding: 10px; font-size: 0.88rem; box-sizing: border-box; width: 100%; }
+        .setup-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+        .setup-card { padding: 18px; border-radius: 14px; position: relative; }
+        .setup-card h4 { margin: 0 0 6px 0; color: var(--primary); font-size: 1.1rem; }
+        .setup-tf { font-size: 0.75rem; padding: 2px 9px; border-radius: 20px; background: rgba(59,130,246,0.15); color: var(--primary); font-weight: bold; }
+        .setup-rr { font-size: 0.75rem; padding: 2px 9px; border-radius: 20px; background: rgba(16,185,129,0.15); color: var(--success); font-weight: bold; }
+        .setup-sec { margin-top: 10px; }
+        .setup-sec .lab { font-size: 0.78rem; font-weight: bold; color: var(--text-light); }
+        .setup-sec .val { font-size: 0.86rem; color: var(--text-main); line-height: 1.6; white-space: pre-wrap; }
+        .setup-del { position: absolute; top: 14px; left: 14px; cursor: pointer; color: var(--danger); font-weight: bold; }
+
+        /* Modal Lightbox */
+        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); backdrop-filter: blur(10px); justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg); padding: 35px; border-radius: 20px; width: 90%; max-width: 500px; box-shadow: 0 20px 50px rgba(0,0,0,1); }
+        .modal img { max-width: 95%; max-height: 95%; border-radius: 12px; }
+        
+    </style>
+</head>
+<body>
+
+    <!-- 1. Live Ticker -->
+    <div class="ticker-container">
+        <!-- تیکر محلی جایگزین: اگر ویجت TradingView (بدون VPN) لود نشود، این نمایش داده می‌شود -->
+        <div class="fallback-ticker" aria-hidden="true">
+            <div class="marquee">
+                <span>🪙 طلا (XAU/USD) <span class="up">▲</span></span>
+                <span>💵 شاخص دلار (DXY)</span>
+                <span>₿ بیت‌کوین (BTC/USD) <span class="up">▲</span></span>
+                <span>📈 داوجونز (US30)</span>
+                <span>💶 یورو/دلار (EUR/USD) <span class="down">▼</span></span>
+                <span style="color:var(--warning)">⚠️ برای قیمت زنده، اینترنت/VPN را روشن کنید</span>
+                <span>🪙 طلا (XAU/USD) <span class="up">▲</span></span>
+                <span>💵 شاخص دلار (DXY)</span>
+                <span>₿ بیت‌کوین (BTC/USD) <span class="up">▲</span></span>
+                <span>📈 داوجونز (US30)</span>
+                <span>💶 یورو/دلار (EUR/USD) <span class="down">▼</span></span>
+            </div>
+        </div>
+        <div class="tradingview-widget-container" style="position:relative; z-index:1;">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+            { "symbols": [ { "proName": "OANDA:XAUUSD", "title": "طلا" }, { "proName": "TVC:DXY", "title": "شاخص دلار" }, { "proName": "BITSTAMP:BTCUSD", "title": "بیت‌کوین" }, { "proName": "CAPITALCOM:US30", "title": "داوجونز" }, { "proName": "OANDA:EURUSD", "title": "یورو/دلار" } ], "showSymbolLogo": true, "colorTheme": "dark", "isTransparent": false, "displayMode": "adaptive", "locale": "fa_IR" }
+            </script>
+        </div>
+    </div>
+
+    <!-- 2. Hero Banner & Theme Toggle -->
+    <div class="hero-banner">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️ حالت روشن</button>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>مسیر معامله‌گری حرفه‌ای</h1>
+            <p>تسلط بر بازار، تسلط بر خویشتن است</p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Quick Links Toolbar -->
+        <div class="quick-links">
+            <a href="https://www.tradingview.com/chart/" target="_blank" class="q-link">📊 چارت تریدینگ ویو</a>
+            <a href="https://www.forexfactory.com/" target="_blank" class="q-link">🌐 تقویم اخبار (ForexFactory)</a>
+            <button class="q-link" onclick="scrollToId('journal-section')">📒 ژورنال معاملات</button>
+            <button class="q-link" onclick="scrollToId('setups-section')">📐 کتابخانه ستاپ‌ها</button>
+            <button class="q-link" onclick="openGlossary()">📖 واژه‌نامه ترید</button>
+            <button class="q-link alert" onclick="document.getElementById('checklistModal').style.display='flex'">⚠️ چک‌لیست قبل از ترید</button>
+        </div>
+
+        <!-- Accordion Dashboard -->
+        <div class="accordion-container">
+            
+            <!-- Item: Wallet -->
+            <div class="acc-item">
+                <button class="acc-btn" onclick="toggleAcc(this)">
+                    <span>💼 کیف پول و مدیریت سرمایه من</span> <span>🔻</span>
+                </button>
+                <div class="acc-content">
+                    <p style="text-align:center; color:var(--text-light); margin-top:0;">موجودی فعلی حساب خود را اینجا مدیریت کنید:</p>
+                    <div class="wallet-display" id="wallet-balance">$0.00</div>
+                    <div class="wallet-controls">
+                        <input type="number" id="wallet-input" class="neo-inset calc-input" placeholder="مبلغ ($)" style="width: 130px;">
+                        <button class="neo-btn" style="color:var(--success);" onclick="updateWallet('add')">➕ واریز / ثبت سود</button>
+                        <button class="neo-btn" style="color:var(--danger);" onclick="updateWallet('sub')">➖ برداشت / ثبت ضرر</button>
+                        <button class="neo-btn" style="color:var(--text-light);" onclick="updateWallet('set')">🔄 تنظیم مجدد</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item: Position Size -->
+            <div class="acc-item">
+                <button class="acc-btn" onclick="toggleAcc(this)">
+                    <span>🧮 محاسبه‌گر حجم ورود (جلوگیری از کال‌مارجین)</span> <span>🔻</span>
+                </button>
+                <div class="acc-content">
+                    <div class="calc-row"><span>موجودی حساب ($):</span> <input type="number" id="calc-bal" class="neo-inset calc-input" value="1000" oninput="calcLot()"></div>
+                    <div class="calc-row"><span>ریسک مجاز (%):</span> <input type="number" id="calc-risk" class="neo-inset calc-input" value="1" step="0.5" oninput="calcLot()"></div>
+                    <div class="calc-row"><span>حد ضرر (به پیپ):</span> <input type="number" id="calc-sl" class="neo-inset calc-input" value="20" oninput="calcLot()"></div>
+                    <div class="calc-result result-good" id="calc-result-lot" style="display:none;"></div>
+                </div>
+            </div>
+
+            <!-- Item: Coin360 Heatmap -->
+            <div class="acc-item">
+                <button class="acc-btn" onclick="toggleAcc(this)">
+                    <span>🗺️ حال و روز بازار (نقشه حرارتی Coin360)</span> <span>🔻</span>
+                </button>
+                <div class="acc-content">
+                    <div style="width: 100%; height: 450px; border-radius: 10px; overflow: hidden; border: 1px solid var(--shadow-light); position: relative;">
+                        <!-- جایگزین محلی پشت iframe: اگر نقشه لود نشد، این پیام دیده می‌شود -->
+                        <div class="widget-fallback" style="position:absolute; inset:0; z-index:0;">
+                            <div style="font-size:2.5rem;">🗺️</div>
+                            <div style="font-weight:bold; color:var(--text-main);">نقشه حرارتی بازار (Coin360)</div>
+                            <div>این بخش برای نمایش به اینترنت/VPN نیاز دارد.</div>
+                            <a href="https://coin360.com/" target="_blank">باز کردن نقشه در سایت اصلی →</a>
+                        </div>
+                        <iframe src="https://coin360.com/widget/map?utm_source=embed_map" width="100%" height="100%" frameborder="0" scrolling="no" style="position:relative; z-index:1;" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item: Clock & Rules -->
+            <div class="acc-item">
+                <button class="acc-btn" onclick="toggleAcc(this)">
+                    <span>⏱️ ساعت بازار و 🛡️ قوانین طلایی</span> <span>🔻</span>
+                </button>
+                <div class="acc-content" style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: space-around;">
+                    <div style="flex:1; min-width: 250px;">
+                        <div style="text-align: center; font-size: 2rem; font-weight: 900; margin-bottom: 15px; color: var(--primary);" id="live-time">--:--:--</div>
+                        <div class="session-box" id="ses-tokyo"><span>🇯🇵 توکیو</span><span dir="ltr">03:30 - 12:30</span></div>
+                        <div class="session-box" id="ses-london"><span>🇬🇧 لندن</span><span dir="ltr">10:30 - 19:30</span></div>
+                        <div class="session-box" id="ses-ny"><span>🇺🇸 نیویورک</span><span dir="ltr">16:30 - 01:30</span></div>
+                    </div>
+                    <div style="flex:1; min-width: 250px;">
+                        <h4 style="margin-top:0;">قوانین غیرقابل مذاکره:</h4>
+                        <div style="display: flex; gap: 10px; margin-bottom:10px;"><span style="color:var(--danger);">✖</span><span>بعد از ۲ ضرر متوالی، سیستم خاموش.</span></div>
+                        <div style="display: flex; gap: 10px; margin-bottom:10px;"><span style="color:var(--danger);">✖</span><span>ورود بدون Stop Loss ممنوع.</span></div>
+                        <div style="display: flex; gap: 10px;"><span style="color:var(--success);">✔</span><span>ورود فقط در صورت تکمیل ستاپ.</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 16-Week Tracker -->
+        <h2 style="text-align: center; color: var(--text-main); margin-bottom: 30px;">📚 ژورنال و مسیر ۱۶ هفته‌ای آموزش</h2>
+        <div id="app-content"></div>
+
+        <!-- Trade Gallery Section -->
+        <h2 style="text-align: center; color: var(--text-main); margin-top: 60px; margin-bottom: 20px;">🖼️ گالری معاملات (آرشیو سود و ضرر)</h2>
+        <div class="neo-flat" style="padding: 25px;">
+            <p style="text-align:center; color:var(--text-light); margin-top:0; margin-bottom: 8px;">عکس معاملات خود را برای بررسی در پایان ماه اینجا ذخیره کنید.</p>
+            <p style="text-align:center; color:var(--text-light); font-size:0.82rem; margin-top:0; margin-bottom: 20px;">🔒 آپلود کاملاً آفلاین است و به VPN نیاز ندارد؛ عکس‌ها فقط روی همین مرورگر/دستگاه ذخیره می‌شوند.</p>
+            
+            <div class="gallery-header">
+                <input type="text" id="gal-desc" class="neo-inset gal-input" placeholder="توضیح (مثلا: سود عالی روی طلا)">
+                <input type="number" id="gal-pnl" class="neo-inset gal-input" placeholder="مبلغ سود/ضرر (+ یا -)">
+                <label class="q-link" style="margin:0; cursor:pointer; background:var(--primary); color:white;">
+                    ➕ افزودن عکس معامله
+                    <input type="file" hidden accept="image/*" onchange="addGalleryItem(event)">
+                </label>
+            </div>
+            
+            <div id="gallery-grid" class="days-grid">
+                <!-- Gallery items will be injected here -->
+            </div>
+        </div>
+
+        <!-- ===== Streak & Badges ===== -->
+        <h2 class="section-head">🔥 انضباط روزانه و نشان‌های افتخار</h2>
+        <p class="section-sub">هر روز که حداقل یک فعالیت (مطالعه، ترید یا یادداشت) ثبت کنی، استریک تو زنده می‌ماند.</p>
+        <div class="neo-flat">
+            <div class="streak-wrap">
+                <div class="streak-flame">
+                    <div class="big" id="streak-emoji">🔥</div>
+                    <div class="streak-num" id="streak-current">۰</div>
+                    <div class="streak-lbl">روز پیاپی فعالیت</div>
+                    <div class="streak-lbl" style="margin-top:6px;">رکورد: <b id="streak-best">۰</b> روز</div>
+                    <button class="neo-btn mini-btn" style="margin-top:12px; color:var(--success);" onclick="checkInToday()">✅ ثبت فعالیت امروز</button>
+                </div>
+                <div class="badges-grid" id="badges-grid"></div>
+            </div>
+        </div>
+
+        <!-- ===== Trade Journal ===== -->
+        <h2 class="section-head" id="journal-section">📒 ژورنال معاملات کامل</h2>
+        <p class="section-sub">هر معامله را ثبت کن تا آمار عملکردت به‌صورت خودکار محاسبه شود.</p>
+        <div class="neo-flat" style="padding:25px;">
+            <div class="tj-form">
+                <div class="tj-field"><label class="field-label">تاریخ</label><input type="date" id="tj-date" class="neo-inset"></div>
+                <div class="tj-field"><label class="field-label">نماد</label><input type="text" id="tj-symbol" class="neo-inset" placeholder="XAUUSD"></div>
+                <div class="tj-field"><label class="field-label">جهت</label>
+                    <select id="tj-dir" class="neo-inset"><option value="buy">خرید (Buy)</option><option value="sell">فروش (Sell)</option></select></div>
+                <div class="tj-field"><label class="field-label">حجم (Lot)</label><input type="number" id="tj-lot" class="neo-inset" step="0.01" placeholder="0.10"></div>
+                <div class="tj-field"><label class="field-label">سود/زیان ($)</label><input type="number" id="tj-pnl" class="neo-inset" placeholder="+25 یا -15"></div>
+                <div class="tj-field"><label class="field-label">R کسب‌شده</label><input type="number" id="tj-r" class="neo-inset" step="0.1" placeholder="مثلا 2"></div>
+                <div class="tj-field" style="grid-column:1/-1;"><label class="field-label">دلیل ورود / ستاپ</label><input type="text" id="tj-reason" class="neo-inset" placeholder="مثلا: شکست مقاومت + پولبک"></div>
+                <div class="tj-field"><label class="field-label">احساس</label>
+                    <select id="tj-emo" class="neo-inset"><option value="😌 آرام">😌 آرام</option><option value="😰 مضطرب">😰 مضطرب</option><option value="🤑 طمع">🤑 طمع</option><option value="😡 انتقامی">😡 انتقامی</option><option value="🥱 بی‌تفاوت">🥱 بی‌تفاوت</option></select></div>
+                <div class="tj-field"><label class="field-label">&nbsp;</label><button class="neo-btn" style="color:var(--success);" onclick="addTrade()">➕ ثبت معامله</button></div>
+            </div>
+
+            <div class="tj-table-wrap neo-inset" style="padding:6px;">
+                <table class="tj-table">
+                    <thead><tr>
+                        <th>تاریخ</th><th>نماد</th><th>جهت</th><th>حجم</th><th>سود/زیان</th><th>R</th><th>دلیل</th><th>احساس</th><th>حذف</th>
+                    </tr></thead>
+                    <tbody id="tj-body"></tbody>
+                </table>
+            </div>
+
+            <div class="tj-stats">
+                <div class="stat-card neo-flat"><div class="num" id="tj-total">۰</div><div class="lbl">تعداد معاملات</div></div>
+                <div class="stat-card neo-flat green"><div class="num" id="tj-winrate">۰٪</div><div class="lbl">نرخ برد (Win-rate)</div></div>
+                <div class="stat-card neo-flat" id="tj-net-card"><div class="num" id="tj-net">$۰</div><div class="lbl">سود/زیان خالص</div></div>
+                <div class="stat-card neo-flat amber"><div class="num" id="tj-pf">۰</div><div class="lbl">Profit Factor</div></div>
+                <div class="stat-card neo-flat purple"><div class="num" id="tj-avgr">۰</div><div class="lbl">میانگین R</div></div>
+            </div>
+            <div class="week-tools">
+                <button class="neo-btn mini-btn" style="color:var(--text-light);" onclick="exportTrades()">⬇️ خروجی CSV</button>
+                <button class="neo-btn mini-btn" style="color:var(--danger);" onclick="clearTrades()">🗑️ پاک کردن کل ژورنال</button>
+            </div>
+        </div>
+
+        <!-- ===== Setup Library ===== -->
+        <h2 class="section-head" id="setups-section">📐 کتابخانه ستاپ‌های شخصی</h2>
+        <p class="section-sub">ستاپ‌های برنده‌ات را با قوانین دقیق ورود و خروج بایگانی کن تا همیشه به آن‌ها وفادار بمانی.</p>
+        <div class="neo-flat" style="padding:25px;">
+            <div class="setup-form">
+                <input type="text" id="su-name" class="neo-inset" placeholder="نام ستاپ (مثلا: پولبک به اوردربلاک)">
+                <select id="su-tf" class="neo-inset">
+                    <option value="">— تایم‌فریم —</option><option>M5</option><option>M15</option><option>M30</option><option>H1</option><option>H4</option><option>Daily</option>
+                </select>
+                <input type="text" id="su-rr" class="neo-inset" placeholder="حداقل R:R (مثلا 1:2)">
+                <input type="text" id="su-entry" class="neo-inset" placeholder="شرایط ورود" style="grid-column:1/-1;">
+                <input type="text" id="su-exit" class="neo-inset" placeholder="حد ضرر و حد سود (خروج)" style="grid-column:1/-1;">
+                <textarea id="su-notes" class="neo-inset" placeholder="نکات/فیلترها (مثلا: فقط در سشن لندن، دور از اخبار قرمز)" style="grid-column:1/-1; min-height:60px;"></textarea>
+                <button class="neo-btn" style="color:var(--success); grid-column:1/-1;" onclick="addSetup()">➕ افزودن ستاپ به کتابخانه</button>
+            </div>
+            <div class="setup-grid" id="setup-grid"></div>
+        </div>
+
+    </div>
+
+    <!-- Modals -->
+    <div id="checklistModal" class="modal" onclick="if(event.target.id==='checklistModal') this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 style="color:var(--warning); text-align:center; margin-top:0;">⚠️ توقف! قبل از زدن دکمه ترید</h2>
+            <p style="color: var(--text-light); margin-bottom: 25px; font-size: 1.1rem; text-align:center;">اگر تیک همه موارد را نمی‌توانی بزنی، دست نگه دار!</p>
+            <label style="display:flex; gap:10px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" style="width:20px;height:20px;"> خبر قرمزی در تقویم اقتصادی نداریم.</label>
+            <label style="display:flex; gap:10px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" style="width:20px;height:20px;"> حجم را با ماشین‌حساب (۱٪ ریسک) حساب کردم.</label>
+            <label style="display:flex; gap:10px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" style="width:20px;height:20px;"> حد ضرر (SL) را تعیین کرده‌ام.</label>
+            <label style="display:flex; gap:10px; margin-bottom:15px; cursor:pointer;"><input type="checkbox" style="width:20px;height:20px;"> ذهنم آرام است و ترید انتقامی نیست.</label>
+            <button class="neo-btn" style="width: 100%; padding: 15px; margin-top: 20px; color: var(--warning); font-size: 1.1rem;" onclick="document.getElementById('checklistModal').style.display='none'">تأیید و ورود به بازار</button>
+        </div>
+    </div>
+
+    <div id="imgModal" class="modal" onclick="this.style.display='none'">
+        <span style="position:absolute; top:20px; right:30px; font-size:50px; color:white; cursor:pointer;">&times;</span>
+        <img id="modalImg" src="" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal" onclick="if(event.target.id==='quizModal') this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width:560px; max-height:88vh; overflow-y:auto;">
+            <h2 style="color:var(--primary); text-align:center; margin-top:0;" id="quiz-title">کوییز هفته</h2>
+            <p style="color:var(--text-light); text-align:center; margin-top:-8px;">برای باز شدن هفته بعد، باید حداقل ۷۰٪ نمره بگیری.</p>
+            <div id="quiz-body"></div>
+            <div class="quiz-result" id="quiz-result" style="display:none;"></div>
+            <button class="neo-btn" id="quiz-submit" style="width:100%; padding:14px; margin-top:10px; color:var(--success);" onclick="submitQuiz()">ثبت پاسخ‌ها و دیدن نمره</button>
+            <button class="neo-btn" style="width:100%; padding:12px; margin-top:10px; color:var(--text-light);" onclick="document.getElementById('quizModal').style.display='none'">بستن</button>
+        </div>
+    </div>
+
+    <!-- Glossary Modal -->
+    <div id="glossModal" class="modal" onclick="if(event.target.id==='glossModal') this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width:820px; max-height:88vh; overflow-y:auto;">
+            <h2 style="color:var(--primary); text-align:center; margin-top:0;">📖 واژه‌نامه اصطلاحات ترید</h2>
+            <input type="text" id="gloss-search" class="neo-inset gloss-search" placeholder="🔍 جست‌وجو (فارسی یا انگلیسی)..." oninput="renderGlossary(this.value)">
+            <div class="gloss-grid" id="gloss-grid"></div>
+            <button class="neo-btn" style="width:100%; padding:12px; margin-top:18px; color:var(--text-light);" onclick="document.getElementById('glossModal').style.display='none'">بستن</button>
+        </div>
+    </div>
+
+    <script>
+        // ساختار جدید: هر هفته شامل عنوان، فاز، و ۶ روز با عنوان جلسه + زمان تخمینی است
+        // phase: foundation | strategy | psych | practice
+        const weeksData = [
+            { title: "هفته ۱: مفاهیم مقدماتی و چرخه‌های اقتصادی", phase: "foundation", goal: "درک ساختار بازارهای مالی و نقش بازیگران اصلی",
+              days: [
+                { t: "بازارهای مالی چیست؟ (فارکس، طلا، کریپتو)", m: 45 },
+                { t: "نقدینگی، بروکر و انواع حساب‌ها", m: 40 },
+                { t: "چرخه‌های اقتصادی و نقش بانک‌های مرکزی", m: 50 },
+                { t: "جفت‌ارزها، اسپرد، پیپ و لوریج", m: 45 },
+                { t: "ساعات بازار و بهترین زمان معامله", m: 35 },
+                { t: "جمع‌بندی + مرور واژگان کلیدی", m: 30 } ] },
+            { title: "هفته ۲: آموزش نرم‌افزارها (متاتریدر/تریدینگ‌ویو)", phase: "foundation", goal: "تسلط عملی بر پلتفرم معاملاتی",
+              days: [
+                { t: "نصب و آشنایی با محیط متاتریدر ۴/۵", m: 40 },
+                { t: "ثبت سفارش، Buy/Sell، Pending Orders", m: 45 },
+                { t: "تنظیم SL و TP و تریل استاپ", m: 40 },
+                { t: "آشنایی کامل با تریدینگ‌ویو", m: 50 },
+                { t: "اندیکاتورها و ابزارهای ترسیم", m: 45 },
+                { t: "تمرین: یک معامله دمو کامل بزن", m: 35 } ] },
+            { title: "هفته ۳: ورود به پرایس اکشن (کندل‌شناسی)", phase: "strategy", goal: "خواندن داستان قیمت از روی کندل‌ها",
+              days: [
+                { t: "آناتومی کندل (بدنه، سایه، رنگ)", m: 40 },
+                { t: "کندل‌های برگشتی (پین‌بار، انگالفینگ)", m: 50 },
+                { t: "کندل‌های ادامه‌دهنده و دوجی", m: 45 },
+                { t: "الگوهای دو و سه کندلی", m: 50 },
+                { t: "تشخیص قدرت خریدار/فروشنده", m: 45 },
+                { t: "تمرین: ۲۰ کندل را روی چارت تحلیل کن", m: 40 } ] },
+            { title: "هفته ۴: روندها، کانال‌ها و سطوح", phase: "strategy", goal: "شناسایی جهت بازار و نقاط کلیدی",
+              days: [
+                { t: "تعریف روند (صعودی/نزولی/خنثی)", m: 40 },
+                { t: "خطوط روند و کانال‌ها", m: 45 },
+                { t: "حمایت و مقاومت کلاسیک", m: 50 },
+                { t: "نقش اعداد رند و سطوح روانی", m: 35 },
+                { t: "شکست (Breakout) و پولبک", m: 50 },
+                { t: "تمرین: رسم سطوح روی ۳ چارت", m: 40 } ] },
+            { title: "هفته ۵: الگوهای قیمتی و ستاپ‌ها (۱)", phase: "strategy", goal: "شناخت الگوهای کلاسیک پرتکرار",
+              days: [
+                { t: "الگوی سر و شانه و معکوس آن", m: 50 },
+                { t: "سقف/کف دوقلو و سه‌قلو", m: 45 },
+                { t: "مثلث‌ها (متقارن، صعودی، نزولی)", m: 50 },
+                { t: "پرچم و کنج (Flag & Wedge)", m: 45 },
+                { t: "نحوه تعیین تارگت الگوها", m: 40 },
+                { t: "تمرین: پیدا کردن ۵ الگو در تاریخچه", m: 45 } ] },
+            { title: "هفته ۶: ستاپ‌های پرایس اکشن (۲)", phase: "strategy", goal: "ساخت ستاپ ورود شخصی و دقیق",
+              days: [
+                { t: "ساختار بازار (HH/HL/LH/LL)", m: 50 },
+                { t: "نواحی عرضه و تقاضا (Supply/Demand)", m: 55 },
+                { t: "اوردربلاک و مفاهیم اسمارت‌مانی", m: 55 },
+                { t: "تایم‌فریم بالا به پایین (Multi-TF)", m: 50 },
+                { t: "ساخت چک‌لیست ورود شخصی", m: 45 },
+                { t: "تمرین: ۳ ستاپ کامل را مستند کن", m: 45 } ] },
+            { title: "هفته ۷: مدیریت سرمایه (مهم‌ترین بخش)", phase: "strategy", goal: "بقا در بازار با مدیریت ریسک حرفه‌ای",
+              days: [
+                { t: "ریسک به ریوارد (R:R) چیست؟", m: 45 },
+                { t: "محاسبه حجم بر اساس درصد ریسک", m: 50 },
+                { t: "قانون ۱٪ و حداکثر دراوداون روزانه", m: 40 },
+                { t: "مدیریت چند پوزیشن و همبستگی", m: 45 },
+                { t: "خروج پله‌ای و مدیریت معامله باز", m: 50 },
+                { t: "تمرین: پلن مدیریت سرمایه بنویس", m: 40 } ] },
+            { title: "هفته ۸: تحلیل فاندامنتال و اخبار", phase: "strategy", goal: "درک تأثیر اخبار بر بازار",
+              days: [
+                { t: "تقویم اقتصادی و اخبار قرمز", m: 45 },
+                { t: "NFP، CPI، نرخ بهره و FOMC", m: 50 },
+                { t: "نقش دلار (DXY) بر طلا و جفت‌ارزها", m: 45 },
+                { t: "سنتیمنت بازار و ریسک‌آن/ریسک‌آف", m: 45 },
+                { t: "مدیریت معامله در زمان خبر", m: 40 },
+                { t: "تمرین: یک هفته اخبار را رصد کن", m: 35 } ] },
+            { title: "هفته ۹: روانشناسی معامله‌گری + پلن", phase: "psych", goal: "تسلط بر ذهن و ساخت پلن معاملاتی",
+              days: [
+                { t: "ترس، طمع و معامله انتقامی", m: 45 },
+                { t: "FOMO و اوورتریدینگ", m: 40 },
+                { t: "پذیرش ضرر و مدیریت احساسات", m: 50 },
+                { t: "ساخت روتین روزانه معامله‌گر", m: 40 },
+                { t: "نوشتن پلن معاملاتی کامل", m: 55 },
+                { t: "تمرین: پلن نهایی خودت را بساز", m: 45 } ] },
+            { title: "هفته ۱۰: لایو تریدهای استاد (۱)", phase: "psych", goal: "مشاهده اجرای واقعی استراتژی",
+              days: [
+                { t: "تماشای لایو ترید + یادداشت‌برداری", m: 60 },
+                { t: "تحلیل تصمیم‌های ورود استاد", m: 50 },
+                { t: "تحلیل نقاط خروج و مدیریت", m: 50 },
+                { t: "شبیه‌سازی همان معامله در دمو", m: 55 },
+                { t: "مقایسه تصمیم خودت با استاد", m: 45 },
+                { t: "تمرین: ۲ لایو دیگر را آرشیو کن", m: 50 } ] },
+            { title: "هفته ۱۱: لایو تریدهای استاد (۲)", phase: "psych", goal: "تعمیق درک اجرای زنده در شرایط مختلف",
+              days: [
+                { t: "لایو ترید در بازار رنج", m: 55 },
+                { t: "لایو ترید در بازار پرنوسان (خبر)", m: 55 },
+                { t: "مدیریت معامله در ضرر", m: 50 },
+                { t: "روانشناسی استاد در لحظه", m: 45 },
+                { t: "جمع‌بندی الگوهای رفتاری برنده", m: 45 },
+                { t: "تمرین: ساخت کتابچه ستاپ‌های برنده", m: 50 } ] },
+            { title: "هفته ۱۲: گزارش‌های هفتگی و رفع اشکال", phase: "psych", goal: "ارزیابی پیشرفت و اصلاح اشتباهات",
+              days: [
+                { t: "تحلیل ژورنال هفته‌های گذشته", m: 50 },
+                { t: "شناسایی الگوهای خطای تکراری", m: 45 },
+                { t: "محاسبه win-rate و میانگین R", m: 45 },
+                { t: "رفع اشکال ستاپ‌های ضعیف", m: 50 },
+                { t: "بازنویسی پلن بر اساس داده‌ها", m: 45 },
+                { t: "تمرین: گزارش عملکرد ماهانه بنویس", m: 40 } ] },
+            { title: "هفته ۱۳: شبیه‌سازی در حساب دمو (۱)", phase: "practice", goal: "اجرای منظم استراتژی روی دمو",
+              days: [
+                { t: "روز معاملاتی کامل روی دمو", m: 60 },
+                { t: "ثبت دقیق هر معامله در ژورنال", m: 50 },
+                { t: "رعایت کامل پلن و قوانین", m: 55 },
+                { t: "مدیریت روزهای بدون ستاپ (صبر)", m: 40 },
+                { t: "بازبینی پایان روز", m: 45 },
+                { t: "تمرین: ۵ روز متوالی بدون تخطی", m: 60 } ] },
+            { title: "هفته ۱۴: شبیه‌سازی در حساب دمو (۲)", phase: "practice", goal: "ثبات در عملکرد و انضباط",
+              days: [
+                { t: "اجرای استراتژی در تایم‌فریم اصلی", m: 60 },
+                { t: "افزایش تعداد معاملات با کیفیت", m: 55 },
+                { t: "مدیریت دراوداون و استریک ضرر", m: 50 },
+                { t: "ثبت آمار و نمودار رشد حساب", m: 45 },
+                { t: "بازبینی هفتگی و اصلاح", m: 45 },
+                { t: "تمرین: هدف‌گذاری R هفتگی", m: 40 } ] },
+            { title: "هفته ۱۵: کنترل احساسات در دمو", phase: "practice", goal: "تثبیت ذهنیت حرفه‌ای زیر فشار",
+              days: [
+                { t: "معامله با حجم بزرگ‌تر (شبیه ریل)", m: 55 },
+                { t: "کنترل هیجان بعد از سود/ضرر بزرگ", m: 50 },
+                { t: "تمرین صبر و حذف اوورترید", m: 45 },
+                { t: "روتین آرامش‌بخش قبل از معامله", m: 40 },
+                { t: "ثبت حالات روانی در ژورنال", m: 45 },
+                { t: "تمرین: یک هفته بدون معامله احساسی", m: 50 } ] },
+            { title: "هفته ۱۶: آمادگی برای حساب ریل", phase: "practice", goal: "گذار امن از دمو به حساب واقعی",
+              days: [
+                { t: "چک‌لیست نهایی آمادگی حساب ریل", m: 45 },
+                { t: "انتخاب بروکر و سایز حساب مناسب", m: 45 },
+                { t: "پلن مدیریت ریسک حساب واقعی", m: 50 },
+                { t: "شروع با حجم بسیار کوچک (Micro)", m: 50 },
+                { t: "قوانین روانی روزهای اول ریل", m: 45 },
+                { t: "تمرین: قرارداد تعهد با خودت بنویس", m: 40 } ] }
+        ];
+
+        const phaseInfo = {
+            foundation: { label: "🏛️ پایه", cls: "phase-foundation" },
+            strategy:   { label: "🎯 استراتژی", cls: "phase-strategy" },
+            psych:      { label: "🧠 روانشناسی", cls: "phase-psych" },
+            practice:   { label: "🏋️ تمرین عملی", cls: "phase-practice" }
+        };
+        const checkItems = [
+            { key: "vid",  label: "محتوا/ویدیو را دیدم", icon: "🎬" },
+            { key: "sum",  label: "خلاصه‌برداری کردم", icon: "📝" },
+            { key: "prac", label: "تمرین چارت انجام شد", icon: "📈" },
+            { key: "rev",  label: "مرور و تثبیت شد", icon: "🔁" }
+        ];
+
+        // ===== Glossary Data =====
+        const glossaryData = [
+            { fa:"پیپ", en:"Pip", cat:"پایه", def:"کوچک‌ترین واحد تغییر قیمت در یک جفت‌ارز؛ معمولاً رقم چهارم اعشار." },
+            { fa:"اسپرد", en:"Spread", cat:"پایه", def:"تفاوت بین قیمت خرید (Ask) و فروش (Bid)؛ هزینه‌ی ورود به معامله." },
+            { fa:"لوریج", en:"Leverage", cat:"پایه", def:"اهرم؛ امکان معامله با حجمی چند برابر سرمایه واقعی." },
+            { fa:"مارجین", en:"Margin", cat:"پایه", def:"وجه تضمین لازم برای باز نگه‌داشتن یک پوزیشن." },
+            { fa:"کال‌مارجین", en:"Margin Call", cat:"ریسک", def:"هشدار/بسته‌شدن اجباری پوزیشن وقتی سرمایه کفاف ضرر را نمی‌دهد." },
+            { fa:"لات", en:"Lot", cat:"پایه", def:"واحد اندازه‌گیری حجم معامله (استاندارد، مینی، میکرو)." },
+            { fa:"حد ضرر", en:"Stop Loss (SL)", cat:"مدیریت ریسک", def:"سفارشی که معامله را در نقطه‌ی از پیش تعیین‌شده با ضرر محدود می‌بندد." },
+            { fa:"حد سود", en:"Take Profit (TP)", cat:"مدیریت ریسک", def:"سفارشی که معامله را در نقطه‌ی هدف سود می‌بندد." },
+            { fa:"ریسک به ریوارد", en:"Risk/Reward", cat:"مدیریت ریسک", def:"نسبت ضرر احتمالی به سود احتمالی یک معامله؛ مثلاً ۱:۲." },
+            { fa:"دراوداون", en:"Drawdown", cat:"مدیریت ریسک", def:"میزان افت سرمایه از بالاترین نقطه تا پایین‌ترین نقطه." },
+            { fa:"پرایس اکشن", en:"Price Action", cat:"تحلیل تکنیکال", def:"تحلیل بازار صرفاً بر اساس حرکت قیمت و کندل‌ها بدون اندیکاتور." },
+            { fa:"حمایت", en:"Support", cat:"تحلیل تکنیکال", def:"سطحی که قیمت تمایل دارد در آن از سقوط بازایستد." },
+            { fa:"مقاومت", en:"Resistance", cat:"تحلیل تکنیکال", def:"سطحی که قیمت تمایل دارد در آن از صعود بازایستد." },
+            { fa:"روند", en:"Trend", cat:"تحلیل تکنیکال", def:"جهت کلی حرکت بازار: صعودی، نزولی یا خنثی." },
+            { fa:"شکست", en:"Breakout", cat:"تحلیل تکنیکال", def:"عبور قاطع قیمت از یک سطح کلیدی." },
+            { fa:"پولبک", en:"Pullback", cat:"تحلیل تکنیکال", def:"بازگشت موقت قیمت به سطح شکسته‌شده قبل از ادامه‌ی روند." },
+            { fa:"پین‌بار", en:"Pin Bar", cat:"کندل‌شناسی", def:"کندلی با سایه‌ی بلند که نشانه‌ی رد قیمت و احتمال برگشت است." },
+            { fa:"انگالفینگ", en:"Engulfing", cat:"کندل‌شناسی", def:"الگوی دو کندلی که کندل دوم بدنه‌ی اول را کاملاً می‌پوشاند." },
+            { fa:"دوجی", en:"Doji", cat:"کندل‌شناسی", def:"کندلی با بدنه‌ی بسیار کوچک که نشانه‌ی بلاتکلیفی بازار است." },
+            { fa:"اوردربلاک", en:"Order Block", cat:"اسمارت‌مانی", def:"ناحیه‌ای که سفارش‌های بزرگ نهادی در آن قرار گرفته‌اند." },
+            { fa:"عرضه و تقاضا", en:"Supply & Demand", cat:"اسمارت‌مانی", def:"نواحی‌ای که فشار خرید یا فروش سنگین وجود دارد." },
+            { fa:"نقدینگی", en:"Liquidity", cat:"اسمارت‌مانی", def:"حجم سفارش‌های موجود؛ مناطقی که قیمت برای جمع‌آوری استاپ‌ها به آن‌ها می‌رود." },
+            { fa:"اسپایک", en:"Spike", cat:"بازار", def:"حرکت ناگهانی و شدید قیمت، اغلب هنگام اخبار." },
+            { fa:"اسلیپیج", en:"Slippage", cat:"بازار", def:"اختلاف بین قیمت درخواستی و قیمت اجراشده‌ی سفارش." },
+            { fa:"اسکالپ", en:"Scalping", cat:"سبک معامله", def:"سبک معاملاتی با سودهای کوچک و تعداد بالا در تایم پایین." },
+            { fa:"سوئینگ", en:"Swing Trading", cat:"سبک معامله", def:"نگه‌داشتن معامله برای چند روز تا چند هفته." },
+            { fa:"فاندامنتال", en:"Fundamental", cat:"تحلیل بنیادی", def:"تحلیل بازار بر اساس داده‌های اقتصادی و اخبار." },
+            { fa:"DXY", en:"Dollar Index", cat:"تحلیل بنیادی", def:"شاخص ارزش دلار آمریکا در برابر سبدی از ارزها." },
+            { fa:"ریسک‌آف", en:"Risk-Off", cat:"سنتیمنت", def:"حالتی که سرمایه‌گذاران از دارایی‌های پرریسک فرار می‌کنند." },
+            { fa:"اوورترید", en:"Overtrading", cat:"روانشناسی", def:"معامله‌ی بیش از حد و بدون ستاپ معتبر؛ از آفت‌های اصلی تریدر." },
+            { fa:"FOMO", en:"FOMO", cat:"روانشناسی", def:"ترس از جا ماندن؛ ورود عجولانه به دلیل حرکت سریع بازار." }
+        ];
+
+        // ===== Quiz Data (یک نمونه‌ی پایه که برای همه‌ی هفته‌ها استفاده می‌شود) =====
+        const quizBank = [
+            { q:"حد ضرر (Stop Loss) به چه منظوری استفاده می‌شود؟", o:["افزایش سود","محدود کردن ضرر معامله","حذف اسپرد","افزایش لوریج"], a:1 },
+            { q:"نسبت ریسک به ریوارد ۱:۳ یعنی چه؟", o:["۳ دلار ریسک برای ۱ دلار سود","۱ واحد ریسک برای ۳ واحد سود بالقوه","ضرر سه‌برابر سود","هیچ‌کدام"], a:1 },
+            { q:"قانون رایج مدیریت سرمایه چند درصد ریسک در هر معامله را توصیه می‌کند؟", o:["۲۵٪","۱۰٪","۱٪ تا ۲٪","۵۰٪"], a:2 },
+            { q:"پین‌بار معمولاً نشانه‌ی چیست؟", o:["ادامه‌ی قطعی روند","رد قیمت و احتمال برگشت","نبود نوسان","افزایش اسپرد"], a:1 },
+            { q:"کدام مورد یک خطای روانشناختی رایج است؟", o:["رعایت پلن","معامله‌ی انتقامی","ثبت ژورنال","صبر برای ستاپ"], a:1 }
+        ];
+
+        let galleryArray = [];
+        let walletTotal = 0;
+
+        function initApp() {
+            const container = document.getElementById('app-content');
+
+            // داشبورد آمار کلی پیشرفت (بالای بخش آموزش)
+            const statsWrap = document.createElement('div');
+            statsWrap.innerHTML = `
+                <div class="overall-progress neo-inset"><div class="overall-progress-fill" id="overall-fill">0%</div></div>
+                <div class="stats-dashboard">
+                    <div class="stat-card neo-flat green"><div class="num" id="stat-done">0</div><div class="lbl">روز تکمیل‌شده از ۹۶</div></div>
+                    <div class="stat-card neo-flat"><div class="num" id="stat-week">۱</div><div class="lbl">هفته فعال</div></div>
+                    <div class="stat-card neo-flat amber"><div class="num" id="stat-hours">0</div><div class="lbl">ساعت مطالعه ثبت‌شده</div></div>
+                    <div class="stat-card neo-flat purple"><div class="num" id="stat-streak">0</div><div class="lbl">امتیاز تسلط کل (ستاره)</div></div>
+                </div>`;
+            container.appendChild(statsWrap);
+
+            weeksData.forEach((week, wIdx) => {
+                const wNum = wIdx + 1;
+                const ph = phaseInfo[week.phase];
+                const weekCard = document.createElement('div');
+                weekCard.className = 'week-card neo-flat';
+
+                const weekHeader = document.createElement('div');
+                weekHeader.className = 'week-header';
+                weekHeader.onclick = () => document.getElementById(`content_w${wNum}`).classList.toggle('active');
+                weekHeader.innerHTML = `
+                    <div style="display:flex; gap:15px; align-items:flex-start; flex:1;">
+                        <span style="margin-top:4px;">🔽</span>
+                        <div style="flex:1;">
+                            <h3>${week.title} <span class="week-badge ${ph.cls}">${ph.label}</span></h3>
+                            <div class="week-meta">🎯 هدف هفته: ${week.goal}</div>
+                            <div class="week-progress-bar"><div class="week-progress-fill" id="wprog_${wNum}"></div></div>
+                            <div class="week-tools" id="wquiz_${wNum}" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                    <span class="week-meta" id="wpct_${wNum}" style="white-space:nowrap;">۰٪</span>`;
+
+                const weekContent = document.createElement('div');
+                weekContent.className = 'week-content';
+                weekContent.id = `content_w${wNum}`;
+
+                const daysGrid = document.createElement('div');
+                daysGrid.className = 'days-grid';
+
+                week.days.forEach((day, dIdx) => {
+                    const d = dIdx + 1;
+                    const dayId = `w${wNum}d${d}`;
+                    const dayBox = document.createElement('div');
+                    dayBox.className = 'day-box neo-flat';
+
+                    const checksHtml = checkItems.map(c => `
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="${dayId}_${c.key}" onchange="saveCheck('${dayId}_${c.key}', this.checked); updateAllProgress();">
+                            <div class="custom-checkbox">✔</div> <span>${c.icon} ${c.label}</span>
+                        </label>`).join('');
+
+                    dayBox.innerHTML = `
+                        <div class="day-header" style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+                            <div>
+                                <div style="color:var(--text-light); font-size:0.8rem;">روز ${d}</div>
+                                <div class="day-title">جلسه ${d}</div>
+                            </div>
+                            <span class="day-time-tag">⏱️ ~${day.m} دقیقه</span>
+                        </div>
+                        <div class="day-topic">📖 ${day.t}</div>
+
+                        <div class="day-section-title">✅ مراحل یادگیری</div>
+                        ${checksHtml}
+
+                        <div class="day-section-title">⭐ سطح تسلط من</div>
+                        <div class="mastery-stars" id="${dayId}_stars" data-day="${dayId}">
+                            ${[1,2,3,4,5].map(s => `<span class="star" data-val="${s}" onclick="setMastery('${dayId}', ${s})">★</span>`).join('')}
+                        </div>
+
+                        <div class="day-section-title">🎚️ درجه دشواری برای من</div>
+                        <div class="difficulty-row" id="${dayId}_diff">
+                            <span class="diff-pill" onclick="setDiff('${dayId}','آسان')">😀 آسان</span>
+                            <span class="diff-pill" onclick="setDiff('${dayId}','متوسط')">🙂 متوسط</span>
+                            <span class="diff-pill" onclick="setDiff('${dayId}','سخت')">😣 سخت</span>
+                        </div>
+
+                        <div class="day-section-title">⏲️ زمان واقعی مطالعه (دقیقه)</div>
+                        <div class="time-tracker">
+                            <input type="number" class="neo-inset" id="${dayId}_time" placeholder="${day.m}" oninput="saveText('${dayId}_time', this.value); updateAllProgress();">
+                            <span style="font-size:0.8rem; color:var(--text-light);">هدف: ${day.m} دقیقه</span>
+                        </div>
+
+                        <div class="day-section-title">📝 ژورنال و نکات کلیدی</div>
+                        <textarea class="neo-inset" id="${dayId}_note" placeholder="مهم‌ترین نکته‌ای که امروز یاد گرفتم..." oninput="saveText('${dayId}_note', this.value)"></textarea>
+
+                        <div class="day-section-title">🃏 سؤال مرور (فلش‌کارت)</div>
+                        <textarea class="neo-inset" id="${dayId}_flash" placeholder="یک سؤال از خودت بپرس که هفته بعد مرور کنی..." style="min-height:55px;" oninput="saveText('${dayId}_flash', this.value)"></textarea>
+
+                        <div class="day-section-title">🏷️ تگ‌ها</div>
+                        <input type="text" class="neo-inset tag-input" id="${dayId}_tagin" placeholder="تگ بنویس و Enter بزن (مثلا: پین‌بار)" onkeydown="addTag(event,'${dayId}')">
+                        <div class="tag-list" id="${dayId}_tags"></div>
+
+                        <div style="margin-top:8px;">
+                            <label class="upload-btn neo-inset" for="${dayId}_file">📸 آپلود عکس ژورنال/چارت</label>
+                            <input type="file" id="${dayId}_file" accept="image/*" hidden onchange="handleSingleImg(event, '${dayId}')">
+                            <div class="image-preview" id="${dayId}_prev" onclick="openImgBase('${dayId}')"></div>
+                        </div>
+                    `;
+                    daysGrid.appendChild(dayBox);
+                });
+
+                const reviewBox = document.createElement('div');
+                reviewBox.style.gridColumn = '1 / -1';
+                reviewBox.className = 'neo-flat';
+                reviewBox.style.padding = '20px';
+                reviewBox.style.borderRight = '4px solid var(--warning)';
+                reviewBox.innerHTML = `
+                    <h4 style="margin-top:0; color:var(--warning); font-size:1.2rem;">📝 مرور و خودارزیابی آخر هفته</h4>
+                    <label class="field-label">بزرگ‌ترین درسی که این هفته گرفتم:</label>
+                    <textarea class="neo-inset" id="w${wNum}_review" placeholder="مهم‌ترین درس هفته..." oninput="saveText('w${wNum}_review', this.value)" style="min-height: 60px;"></textarea>
+                    <label class="field-label" style="margin-top:12px;">یک چیزی که باید هفته بعد بهترش کنم:</label>
+                    <textarea class="neo-inset" id="w${wNum}_improve" placeholder="نقطه‌ای که باید روی آن کار کنم..." oninput="saveText('w${wNum}_improve', this.value)" style="min-height: 55px;"></textarea>
+                    <div class="week-tools">
+                        <button class="neo-btn mini-btn" style="color:var(--success);" onclick="markWeekDone(${wNum})">✅ تیک همه روزهای این هفته</button>
+                        <button class="neo-btn mini-btn" style="color:var(--text-light);" onclick="resetWeek(${wNum})">↩️ پاک کردن تیک‌های هفته</button>
+                    </div>
+                `;
+                daysGrid.appendChild(reviewBox);
+
+                weekContent.appendChild(daysGrid);
+                weekCard.appendChild(weekHeader);
+                weekCard.appendChild(weekContent);
+                container.appendChild(weekCard);
+            });
+
+            loadTheme();
+            loadData();
+            loadWallet();
+            loadGallery();
+            loadEduExtras();
+            updateAllProgress();
+            renderStreak();
+            renderTrades();
+            renderSetups();
+            renderQuizButtons();
+            startClock();
+            calcLot();
+        }
+
+        // اسکرول نرم به یک بخش
+        function scrollToId(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }
+
+        // --- Theme Toggle ---
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('p_theme', isLight ? 'light' : 'dark');
+            document.getElementById('themeBtn').innerText = isLight ? '🌙 حالت تاریک' : '☀️ حالت روشن';
+        }
+
+        function loadTheme() {
+            if(localStorage.getItem('p_theme') === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeBtn').innerText = '🌙 حالت تاریک';
+            }
+        }
+
+        // --- Accordion Logic ---
+        function toggleAcc(btn) {
+            const content = btn.nextElementSibling;
+            btn.classList.toggle('active');
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                btn.querySelector('span:last-child').innerText = "🔻";
+            } else {
+                content.style.display = "block";
+                btn.querySelector('span:last-child').innerText = "🔺";
+            }
+        }
+
+        // --- Wallet Logic ---
+        function loadWallet() {
+            walletTotal = parseFloat(localStorage.getItem('wallet_balance')) || 0;
+            document.getElementById('wallet-balance').innerText = `$${walletTotal.toFixed(2)}`;
+            // Update calculator balance automatically
+            document.getElementById('calc-bal').value = walletTotal > 0 ? walletTotal : 1000;
+        }
+
+        function updateWallet(action) {
+            const inputVal = parseFloat(document.getElementById('wallet-input').value);
+            if(!inputVal && action !== 'set') return;
+
+            if(action === 'add') walletTotal += inputVal;
+            else if(action === 'sub') walletTotal -= inputVal;
+            else if(action === 'set') walletTotal = inputVal || 0;
+
+            localStorage.setItem('wallet_balance', walletTotal);
+            document.getElementById('wallet-input').value = '';
+            loadWallet();
+            calcLot();
+        }
+
+        // --- Gallery Logic ---
+        function loadGallery() {
+            galleryArray = JSON.parse(localStorage.getItem('trade_gallery')) || [];
+            renderGallery();
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = '';
+            
+            if(galleryArray.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; color:var(--text-light); grid-column:1/-1;">گالری خالی است. اولین معامله خود را ثبت کنید!</p>';
+                return;
+            }
+
+            galleryArray.forEach(item => {
+                const isProfit = item.pnl >= 0;
+                const badgeClass = isProfit ? 'profit' : 'loss';
+                const pnlSign = isProfit ? '+' : '';
+                
+                const card = document.createElement('div');
+                card.className = 'gal-card neo-flat';
+                card.innerHTML = `
+                    <div class="gal-del" onclick="deleteGalItem(${item.id})">✖</div>
+                    <div class="gal-badge ${badgeClass}">${pnlSign}$${item.pnl}</div>
+                    <div class="gal-img" style="background-image:url(${item.img})" onclick="openModalImg('${item.img}')"></div>
+                    <div style="padding: 5px; font-size:0.9rem;">
+                        <div style="font-weight:bold; color:var(--text-main); margin-bottom:5px;">${item.desc || 'بدون توضیح'}</div>
+                        <div style="color:var(--text-light); font-size:0.8rem;">تاریخ: ${item.date}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addGalleryItem(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+
+            const pnl = parseFloat(document.getElementById('gal-pnl').value) || 0;
+            const desc = document.getElementById('gal-desc').value;
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600; // Compress heavily for gallery
+                    let w = img.width, h = img.height;
+                    if(w > MAX_WIDTH) { h = Math.round((h * MAX_WIDTH) / w); w = MAX_WIDTH; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    const b64 = canvas.toDataURL('image/jpeg', 0.5);
+                    
+                    const newItem = {
+                        id: Date.now(),
+                        img: b64,
+                        pnl: pnl,
+                        desc: desc,
+                        date: new Date().toLocaleDateString('fa-IR')
+                    };
+
+                    try {
+                        galleryArray.push(newItem);
+                        localStorage.setItem('trade_gallery', JSON.stringify(galleryArray));
+                        
+                        // Clear inputs
+                        document.getElementById('gal-pnl').value = '';
+                        document.getElementById('gal-desc').value = '';
+                        
+                        // Auto update wallet if it's a PnL
+                        if(pnl !== 0 && confirm(`آیا می‌خواهید این مبلغ ($${pnl}) به کیف پول شما اعمال شود؟`)) {
+                            walletTotal += pnl;
+                            localStorage.setItem('wallet_balance', walletTotal);
+                            loadWallet();
+                        }
+                        
+                        renderGallery();
+                    } catch(err) {
+                        alert("⚠️ حافظه مرورگر پر شده است. لطفاً عکس‌های قدیمی گالری را پاک کنید.");
+                    }
+                }
+                img.src = ev.target.result;
+            }
+            reader.readAsDataURL(file);
+            e.target.value = ''; // reset file input
+        }
+
+        function deleteGalItem(id) {
+            if(confirm("آیا از حذف این عکس مطمئن هستید؟")) {
+                galleryArray = galleryArray.filter(item => item.id !== id);
+                localStorage.setItem('trade_gallery', JSON.stringify(galleryArray));
+                renderGallery();
+            }
+        }
+
+        function openModalImg(b64) {
+            document.getElementById('modalImg').src = b64; 
+            document.getElementById('imgModal').style.display = 'flex';
+        }
+
+        // --- Basic Data & 16-Week Tracker ---
+        function saveCheck(id, val) { localStorage.setItem(id, val); }
+        function saveText(id, val) { localStorage.setItem(id, val); }
+
+        function loadData() {
+            const checkSuffixes = ['_vid','_sum','_prac','_rev'];
+            const textSuffixes  = ['_note','_review','_improve','_flash'];
+            for(let i=0; i<localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const val = localStorage.getItem(key);
+                if(checkSuffixes.some(s => key.endsWith(s))) {
+                    const el = document.getElementById(key);
+                    if(el) el.checked = (val === 'true');
+                } else if(textSuffixes.some(s => key.endsWith(s))) {
+                    const el = document.getElementById(key);
+                    if(el) el.value = val;
+                } else if(key.endsWith('_img')) {
+                    const el = document.getElementById(`${key.replace('_img', '')}_prev`);
+                    if(el) { el.style.display = 'block'; el.style.backgroundImage = `url(${val})`; }
+                }
+            }
+        }
+
+        function handleSingleImg(e, dayId) {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600; 
+                    let w = img.width, h = img.height;
+                    if(w > MAX_WIDTH) { h = Math.round((h * MAX_WIDTH) / w); w = MAX_WIDTH; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    const b64 = canvas.toDataURL('image/jpeg', 0.5);
+                    try {
+                        localStorage.setItem(`${dayId}_img`, b64);
+                        const p = document.getElementById(`${dayId}_prev`);
+                        p.style.display = 'block'; p.style.backgroundImage = `url(${b64})`;
+                    } catch(err) { alert("⚠️ حافظه پر شده است."); }
+                }
+                img.src = ev.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function openImgBase(dayId) {
+            const b64 = localStorage.getItem(`${dayId}_img`);
+            if(b64) { document.getElementById('modalImg').src = b64; document.getElementById('imgModal').style.display = 'flex'; }
+        }
+
+        // --- Education Extras: Mastery, Difficulty, Tags, Progress ---
+        function setMastery(dayId, val) {
+            const cur = parseInt(localStorage.getItem(`${dayId}_mastery`)) || 0;
+            const newVal = (cur === val) ? 0 : val; // کلیک مجدد روی همان ستاره = پاک کردن
+            localStorage.setItem(`${dayId}_mastery`, newVal);
+            paintStars(dayId, newVal);
+            updateAllProgress();
+        }
+        function paintStars(dayId, val) {
+            const wrap = document.getElementById(`${dayId}_stars`);
+            if(!wrap) return;
+            wrap.querySelectorAll('.star').forEach(st => {
+                st.classList.toggle('filled', parseInt(st.dataset.val) <= val);
+            });
+        }
+
+        function setDiff(dayId, level) {
+            localStorage.setItem(`${dayId}_diff`, level);
+            paintDiff(dayId, level);
+        }
+        function paintDiff(dayId, level) {
+            const wrap = document.getElementById(`${dayId}_diff`);
+            if(!wrap) return;
+            wrap.querySelectorAll('.diff-pill').forEach(p => {
+                p.classList.toggle('active', p.innerText.includes(level));
+            });
+        }
+
+        function addTag(e, dayId) {
+            if(e.key !== 'Enter') return;
+            e.preventDefault();
+            const inp = e.target;
+            const val = inp.value.trim();
+            if(!val) return;
+            let tags = JSON.parse(localStorage.getItem(`${dayId}_tagsdata`)) || [];
+            if(!tags.includes(val)) { tags.push(val); localStorage.setItem(`${dayId}_tagsdata`, JSON.stringify(tags)); }
+            inp.value = '';
+            paintTags(dayId, tags);
+        }
+        function removeTag(dayId, tag) {
+            let tags = JSON.parse(localStorage.getItem(`${dayId}_tagsdata`)) || [];
+            tags = tags.filter(t => t !== tag);
+            localStorage.setItem(`${dayId}_tagsdata`, JSON.stringify(tags));
+            paintTags(dayId, tags);
+        }
+        function paintTags(dayId, tags) {
+            const box = document.getElementById(`${dayId}_tags`);
+            if(!box) return;
+            box.innerHTML = tags.map(t => `<span class="tag-chip" onclick="removeTag('${dayId}','${t.replace(/'/g,"")}')" title="کلیک برای حذف">#${t} ✕</span>`).join('');
+        }
+
+        // بارگذاری همه‌ی آپشن‌های آموزشی اضافه‌شده
+        function loadEduExtras() {
+            weeksData.forEach((week, wIdx) => {
+                const wNum = wIdx + 1;
+                week.days.forEach((day, dIdx) => {
+                    const dayId = `w${wNum}d${dIdx+1}`;
+                    paintStars(dayId, parseInt(localStorage.getItem(`${dayId}_mastery`)) || 0);
+                    const diff = localStorage.getItem(`${dayId}_diff`);
+                    if(diff) paintDiff(dayId, diff);
+                    paintTags(dayId, JSON.parse(localStorage.getItem(`${dayId}_tagsdata`)) || []);
+                    const tm = document.getElementById(`${dayId}_time`);
+                    const savedTime = localStorage.getItem(`${dayId}_time`);
+                    if(tm && savedTime) tm.value = savedTime;
+                    const fl = document.getElementById(`${dayId}_flash`);
+                    const savedFl = localStorage.getItem(`${dayId}_flash`);
+                    if(fl && savedFl) fl.value = savedFl;
+                });
+            });
+        }
+
+        // محاسبه پیشرفت هر هفته + آمار کلی
+        function updateAllProgress() {
+            let totalDone = 0, totalMinutes = 0, totalStars = 0, activeWeek = 1;
+            const totalDays = weeksData.length * 6;
+
+            weeksData.forEach((week, wIdx) => {
+                const wNum = wIdx + 1;
+                let weekDone = 0;
+                week.days.forEach((day, dIdx) => {
+                    const dayId = `w${wNum}d${dIdx+1}`;
+                    // یک روز "تکمیل" است اگر همه‌ی چک‌باکس‌هایش تیک خورده باشد
+                    const allChecked = checkItems.every(c => localStorage.getItem(`${dayId}_${c.key}`) === 'true');
+                    if(allChecked) { weekDone++; totalDone++; }
+                    totalMinutes += parseInt(localStorage.getItem(`${dayId}_time`)) || 0;
+                    totalStars += parseInt(localStorage.getItem(`${dayId}_mastery`)) || 0;
+                });
+                const pct = Math.round((weekDone / 6) * 100);
+                const fill = document.getElementById(`wprog_${wNum}`);
+                const pctEl = document.getElementById(`wpct_${wNum}`);
+                if(fill) fill.style.width = pct + '%';
+                if(pctEl) pctEl.innerText = toFa(pct) + '٪';
+                if(weekDone > 0 && weekDone < 6) activeWeek = wNum;
+                else if(weekDone === 6 && wNum < weeksData.length) activeWeek = wNum + 1;
+            });
+
+            const overallPct = Math.round((totalDone / totalDays) * 100);
+            const of = document.getElementById('overall-fill');
+            if(of) { of.style.width = Math.max(overallPct,4) + '%'; of.innerText = toFa(overallPct) + '٪'; }
+            setNum('stat-done', totalDone);
+            setNum('stat-week', activeWeek);
+            setNum('stat-hours', (totalMinutes/60).toFixed(1));
+            setNum('stat-streak', totalStars);
+        }
+        function setNum(id, v) { const e = document.getElementById(id); if(e) e.innerText = toFa(v); }
+        function toFa(n) { return String(n).replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]); }
+
+        function markWeekDone(wNum) {
+            for(let d=1; d<=6; d++){
+                const dayId = `w${wNum}d${d}`;
+                checkItems.forEach(c => {
+                    localStorage.setItem(`${dayId}_${c.key}`, 'true');
+                    const el = document.getElementById(`${dayId}_${c.key}`); if(el) el.checked = true;
+                });
+            }
+            updateAllProgress();
+        }
+        function resetWeek(wNum) {
+            if(!confirm('تیک‌های مراحل یادگیری این هفته پاک شود؟')) return;
+            for(let d=1; d<=6; d++){
+                const dayId = `w${wNum}d${d}`;
+                checkItems.forEach(c => {
+                    localStorage.removeItem(`${dayId}_${c.key}`);
+                    const el = document.getElementById(`${dayId}_${c.key}`); if(el) el.checked = false;
+                });
+            }
+            updateAllProgress();
+        }
+
+        // ===================== STREAK & BADGES =====================
+        const badgeDefs = [
+            { id:"first",  ic:"🌱", nm:"اولین قدم", ds:"اولین فعالیت ثبت شد", test:(s)=> s.totalDays>=1 },
+            { id:"week1",  ic:"📅", nm:"یک هفته", ds:"۷ روز فعالیت", test:(s)=> s.best>=7 },
+            { id:"streak3",ic:"🔥", nm:"شعله", ds:"۳ روز پیاپی", test:(s)=> s.best>=3 },
+            { id:"journal",ic:"📒", nm:"ژورنال‌نویس", ds:"ثبت ۵ معامله", test:(s)=> s.trades>=5 },
+            { id:"setup",  ic:"📐", nm:"معمار ستاپ", ds:"ساخت ۳ ستاپ", test:(s)=> s.setups>=3 },
+            { id:"quiz",   ic:"🎓", nm:"دانش‌آموخته", ds:"قبولی در ۱ کوییز", test:(s)=> s.quizPassed>=1 },
+            { id:"master", ic:"🏆", nm:"استاد کوییز", ds:"قبولی در ۸ کوییز", test:(s)=> s.quizPassed>=8 },
+            { id:"disc",   ic:"💎", nm:"انضباط فولادی", ds:"۱۴ روز پیاپی", test:(s)=> s.best>=14 }
+        ];
+
+        function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+        function getStreakData(){ return JSON.parse(localStorage.getItem('streak_data')) || { days:[], current:0, best:0 }; }
+
+        function checkInToday(){
+            const data = getStreakData();
+            const tk = todayKey();
+            if(data.days.includes(tk)){ renderStreak(); return; }
+            // محاسبه پیوستگی نسبت به دیروز
+            const y = new Date(); y.setDate(y.getDate()-1);
+            const yk = y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();
+            data.current = data.days.includes(yk) ? data.current+1 : 1;
+            data.days.push(tk);
+            if(data.current > data.best) data.best = data.current;
+            localStorage.setItem('streak_data', JSON.stringify(data));
+            renderStreak();
+        }
+
+        function renderStreak(){
+            const data = getStreakData();
+            // اگر آخرین check-in بیش از یک روز قبل بوده، استریک جاری صفر می‌شود
+            if(data.days.length){
+                const last = data.days[data.days.length-1];
+                const y = new Date(); 
+                const tk = todayKey();
+                const yk = (d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate())(new Date(Date.now()-86400000));
+                if(last!==tk && last!==yk) data.current = 0;
+            }
+            document.getElementById('streak-current').innerText = toFa(data.current);
+            document.getElementById('streak-best').innerText = toFa(data.best);
+            document.getElementById('streak-emoji').innerText = data.current>=14?'💎':data.current>=7?'🔥':data.current>=3?'🔥':data.current>=1?'✨':'🕯️';
+
+            const stats = {
+                totalDays: data.days.length,
+                current: data.current,
+                best: data.best,
+                trades: (JSON.parse(localStorage.getItem('trades'))||[]).length,
+                setups: (JSON.parse(localStorage.getItem('setups'))||[]).length,
+                quizPassed: Object.keys(localStorage).filter(k=>k.startsWith('quiz_pass_')).length
+            };
+            const grid = document.getElementById('badges-grid');
+            grid.innerHTML = badgeDefs.map(b=>{
+                const earned = b.test(stats);
+                return `<div class="badge ${earned?'earned':''}"><div class="ic">${b.ic}</div><div class="nm">${b.nm}</div><div class="ds">${b.ds}</div></div>`;
+            }).join('');
+        }
+
+        // ===================== TRADE JOURNAL =====================
+        function addTrade(){
+            const t = {
+                id: Date.now(),
+                date: document.getElementById('tj-date').value || new Date().toISOString().slice(0,10),
+                symbol: (document.getElementById('tj-symbol').value||'-').toUpperCase(),
+                dir: document.getElementById('tj-dir').value,
+                lot: parseFloat(document.getElementById('tj-lot').value)||0,
+                pnl: parseFloat(document.getElementById('tj-pnl').value)||0,
+                r: parseFloat(document.getElementById('tj-r').value)||0,
+                reason: document.getElementById('tj-reason').value||'-',
+                emo: document.getElementById('tj-emo').value
+            };
+            const arr = JSON.parse(localStorage.getItem('trades'))||[];
+            arr.unshift(t);
+            localStorage.setItem('trades', JSON.stringify(arr));
+            ['tj-symbol','tj-lot','tj-pnl','tj-r','tj-reason'].forEach(id=>document.getElementById(id).value='');
+            renderTrades(); renderStreak();
+        }
+
+        function delTrade(id){
+            let arr = JSON.parse(localStorage.getItem('trades'))||[];
+            arr = arr.filter(t=>t.id!==id);
+            localStorage.setItem('trades', JSON.stringify(arr));
+            renderTrades(); renderStreak();
+        }
+        function clearTrades(){
+            if(!confirm('کل ژورنال معاملات پاک شود؟')) return;
+            localStorage.removeItem('trades'); renderTrades(); renderStreak();
+        }
+
+        function renderTrades(){
+            const arr = JSON.parse(localStorage.getItem('trades'))||[];
+            const body = document.getElementById('tj-body');
+            if(!body) return;
+            if(arr.length===0){
+                body.innerHTML = '<tr><td colspan="9" style="color:var(--text-light); padding:25px;">هنوز معامله‌ای ثبت نشده است.</td></tr>';
+            } else {
+                body.innerHTML = arr.map(t=>`
+                    <tr>
+                        <td dir="ltr">${t.date}</td>
+                        <td>${t.symbol}</td>
+                        <td><span class="tj-dir ${t.dir}">${t.dir==='buy'?'خرید':'فروش'}</span></td>
+                        <td dir="ltr">${t.lot}</td>
+                        <td class="${t.pnl>=0?'pnl-pos':'pnl-neg'}" dir="ltr">${t.pnl>=0?'+':''}$${t.pnl}</td>
+                        <td dir="ltr">${t.r||'-'}</td>
+                        <td style="white-space:normal; max-width:200px;">${t.reason}</td>
+                        <td>${t.emo}</td>
+                        <td><span class="tj-del" onclick="delTrade(${t.id})">✖</span></td>
+                    </tr>`).join('');
+            }
+            // آمار
+            const total = arr.length;
+            const wins = arr.filter(t=>t.pnl>0).length;
+            const grossWin = arr.filter(t=>t.pnl>0).reduce((s,t)=>s+t.pnl,0);
+            const grossLoss = Math.abs(arr.filter(t=>t.pnl<0).reduce((s,t)=>s+t.pnl,0));
+            const net = arr.reduce((s,t)=>s+t.pnl,0);
+            const avgR = total? (arr.reduce((s,t)=>s+(t.r||0),0)/total):0;
+            const pf = grossLoss>0 ? (grossWin/grossLoss) : (grossWin>0?grossWin:0);
+            const winrate = total? Math.round((wins/total)*100):0;
+            setNum('tj-total', total);
+            document.getElementById('tj-winrate').innerText = toFa(winrate)+'٪';
+            const netEl = document.getElementById('tj-net');
+            netEl.innerText = (net>=0?'+$':'-$')+toFa(Math.abs(net).toFixed(0));
+            netEl.style.color = net>=0?'var(--success)':'var(--danger)';
+            document.getElementById('tj-net-card').className = 'stat-card neo-flat '+(net>=0?'green':'');
+            document.getElementById('tj-pf').innerText = toFa(pf.toFixed(2));
+            document.getElementById('tj-avgr').innerText = toFa(avgR.toFixed(2));
+        }
+
+        function exportTrades(){
+            const arr = JSON.parse(localStorage.getItem('trades'))||[];
+            if(!arr.length){ alert('ژورنال خالی است.'); return; }
+            let csv = 'Date,Symbol,Direction,Lot,PnL,R,Reason,Emotion\n';
+            arr.forEach(t=>{ csv += `${t.date},${t.symbol},${t.dir},${t.lot},${t.pnl},${t.r},"${t.reason}",${t.emo}\n`; });
+            const blob = new Blob(["\uFEFF"+csv], {type:'text/csv;charset=utf-8'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = 'trade-journal.csv'; a.click();
+        }
+
+        // ===================== SETUP LIBRARY =====================
+        function addSetup(){
+            const name = document.getElementById('su-name').value.trim();
+            if(!name){ alert('نام ستاپ را وارد کنید.'); return; }
+            const s = {
+                id: Date.now(),
+                name, tf: document.getElementById('su-tf').value,
+                rr: document.getElementById('su-rr').value,
+                entry: document.getElementById('su-entry').value,
+                exit: document.getElementById('su-exit').value,
+                notes: document.getElementById('su-notes').value
+            };
+            const arr = JSON.parse(localStorage.getItem('setups'))||[];
+            arr.unshift(s);
+            localStorage.setItem('setups', JSON.stringify(arr));
+            ['su-name','su-rr','su-entry','su-exit','su-notes'].forEach(id=>document.getElementById(id).value='');
+            document.getElementById('su-tf').value='';
+            renderSetups(); renderStreak();
+        }
+        function delSetup(id){
+            if(!confirm('این ستاپ حذف شود؟')) return;
+            let arr = JSON.parse(localStorage.getItem('setups'))||[];
+            arr = arr.filter(s=>s.id!==id);
+            localStorage.setItem('setups', JSON.stringify(arr));
+            renderSetups(); renderStreak();
+        }
+        function renderSetups(){
+            const arr = JSON.parse(localStorage.getItem('setups'))||[];
+            const grid = document.getElementById('setup-grid');
+            if(!grid) return;
+            if(arr.length===0){
+                grid.innerHTML = '<p style="color:var(--text-light); grid-column:1/-1; text-align:center; padding:15px;">هنوز ستاپی ثبت نشده. اولین ستاپ برنده‌ات را اضافه کن!</p>';
+                return;
+            }
+            grid.innerHTML = arr.map(s=>`
+                <div class="setup-card neo-flat">
+                    <span class="setup-del" onclick="delSetup(${s.id})">✖</span>
+                    <h4>📐 ${s.name}</h4>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        ${s.tf?`<span class="setup-tf">⏱️ ${s.tf}</span>`:''}
+                        ${s.rr?`<span class="setup-rr">🎯 R:R ${s.rr}</span>`:''}
+                    </div>
+                    ${s.entry?`<div class="setup-sec"><div class="lab">🟢 ورود:</div><div class="val">${s.entry}</div></div>`:''}
+                    ${s.exit?`<div class="setup-sec"><div class="lab">🔴 خروج:</div><div class="val">${s.exit}</div></div>`:''}
+                    ${s.notes?`<div class="setup-sec"><div class="lab">📌 نکات:</div><div class="val">${s.notes}</div></div>`:''}
+                </div>`).join('');
+        }
+
+        // ===================== GLOSSARY =====================
+        function openGlossary(){ document.getElementById('glossModal').style.display='flex'; renderGlossary(''); }
+        function renderGlossary(filter){
+            filter = (filter||'').trim().toLowerCase();
+            const grid = document.getElementById('gloss-grid');
+            const items = glossaryData.filter(g=> !filter || g.fa.toLowerCase().includes(filter) || g.en.toLowerCase().includes(filter) || g.def.toLowerCase().includes(filter));
+            if(items.length===0){ grid.innerHTML = '<p style="color:var(--text-light); grid-column:1/-1; text-align:center;">موردی یافت نشد.</p>'; return; }
+            grid.innerHTML = items.map(g=>`
+                <div class="gloss-card neo-inset">
+                    <span class="gloss-cat">${g.cat}</span>
+                    <div class="gloss-term">${g.fa} <span class="gloss-en">(${g.en})</span></div>
+                    <div class="gloss-def">${g.def}</div>
+                </div>`).join('');
+        }
+
+        // ===================== WEEKLY QUIZ + LOCK =====================
+        let currentQuizWeek = 1;
+        function isWeekUnlocked(wNum){
+            if(wNum===1) return true;
+            return localStorage.getItem('quiz_pass_'+(wNum-1)) === 'true';
+        }
+        function renderQuizButtons(){
+            weeksData.forEach((week,wIdx)=>{
+                const wNum = wIdx+1;
+                const box = document.getElementById('wquiz_'+wNum);
+                if(!box) return;
+                const passed = localStorage.getItem('quiz_pass_'+wNum)==='true';
+                const unlocked = isWeekUnlocked(wNum);
+                let html = '';
+                if(!unlocked){
+                    html = `<span class="week-lock">🔒 برای باز شدن، کوییز هفته ${toFa(wNum-1)} را قبول شو</span>`;
+                } else {
+                    html = `<button class="neo-btn mini-btn" style="color:var(--primary);" onclick="openQuiz(${wNum})">📝 کوییز هفته ${toFa(wNum)}</button>`;
+                    if(passed) html += `<span class="week-pass">✅ قبول شدی (نمره ذخیره شد)</span>`;
+                }
+                box.innerHTML = html;
+            });
+        }
+        function openQuiz(wNum){
+            currentQuizWeek = wNum;
+            document.getElementById('quiz-title').innerText = `کوییز پایان هفته ${toFa(wNum)}`;
+            const body = document.getElementById('quiz-body');
+            body.innerHTML = quizBank.map((q,i)=>`
+                <div class="quiz-q" id="qq_${i}">
+                    <div class="qt">${toFa(i+1)}. ${q.q}</div>
+                    ${q.o.map((opt,j)=>`<label class="quiz-opt"><input type="radio" name="q_${i}" value="${j}">${opt}</label>`).join('')}
+                </div>`).join('');
+            document.getElementById('quiz-result').style.display='none';
+            document.getElementById('quiz-submit').style.display='block';
+            document.getElementById('quizModal').style.display='flex';
+        }
+        function submitQuiz(){
+            let correct = 0;
+            quizBank.forEach((q,i)=>{
+                const sel = document.querySelector(`input[name="q_${i}"]:checked`);
+                const opts = document.querySelectorAll(`#qq_${i} .quiz-opt`);
+                opts.forEach((o,j)=>{
+                    o.classList.remove('correct','wrong');
+                    if(j===q.a) o.classList.add('correct');
+                });
+                if(sel){
+                    const val = parseInt(sel.value);
+                    if(val===q.a) correct++;
+                    else opts[val].classList.add('wrong');
+                }
+            });
+            const pct = Math.round((correct/quizBank.length)*100);
+            const passed = pct>=70;
+            const res = document.getElementById('quiz-result');
+            res.style.display='block';
+            res.style.color = passed?'var(--success)':'var(--danger)';
+            res.innerHTML = `نمره: ${toFa(pct)}٪ (${toFa(correct)} از ${toFa(quizBank.length)})<br>${passed?'🎉 قبول شدی! هفته بعد باز شد.':'❌ زیر ۷۰٪ شدی، دوباره تلاش کن.'}`;
+            if(passed){
+                localStorage.setItem('quiz_pass_'+currentQuizWeek,'true');
+                localStorage.setItem('quiz_score_'+currentQuizWeek, pct);
+                renderQuizButtons();
+                renderStreak();
+            }
+            document.getElementById('quiz-submit').style.display='none';
+        }
+
+        // --- Calculators ---
+        function calcLot() {
+            const bal = parseFloat(document.getElementById('calc-bal').value) || 0;
+            const riskPct = parseFloat(document.getElementById('calc-risk').value) || 0;
+            const slPips = parseFloat(document.getElementById('calc-sl').value) || 0;
+            const res = document.getElementById('calc-result-lot');
+            if (bal > 0 && riskPct > 0 && slPips > 0) {
+                const riskAmount = bal * (riskPct / 100);
+                const lotSize = riskAmount / (slPips * 10);
+                res.style.display = 'block';
+                res.innerHTML = `حجم ورود: <span style="font-size:1.5rem;">${lotSize.toFixed(2)} Lot</span><br><span style="font-size:0.9rem; font-weight:normal;">(ضرر احتمالی: $${riskAmount.toFixed(2)})</span>`;
+            } else { res.style.display = 'none'; }
+        }
+
+        // --- Clock ---
+        function startClock() {
+            setInterval(() => {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Tehran', hour12: false });
+                document.getElementById('live-time').innerText = timeStr;
+                const [h, m] = timeStr.split(':').map(Number);
+                const timeFloat = h + (m / 60);
+                document.getElementById('ses-tokyo').className = (timeFloat >= 3.5 && timeFloat < 12.5) ? 'session-box active' : 'session-box';
+                document.getElementById('ses-london').className = (timeFloat >= 10.5 && timeFloat < 19.5) ? 'session-box active' : 'session-box';
+                document.getElementById('ses-ny').className = (timeFloat >= 16.5 || timeFloat < 1.5) ? 'session-box active' : 'session-box';
+            }, 1000);
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
